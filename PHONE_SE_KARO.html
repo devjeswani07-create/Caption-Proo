@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Phone Se PlayStore — CaptioneX</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,system-ui,sans-serif;background:#09090f;color:#f0f0ff;min-height:100vh;padding-bottom:40px}
+
+.hero{background:linear-gradient(135deg,#4c1d95,#6d28d9 40%,#db2777);padding:40px 20px 32px;text-align:center}
+.logo{font-size:56px;margin-bottom:10px}
+.hero h1{font-size:26px;font-weight:900;margin-bottom:6px;letter-spacing:-.3px}
+.hero p{font-size:13px;opacity:.85;line-height:1.6}
+.badge-row{display:flex;justify-content:center;gap:8px;margin-top:14px;flex-wrap:wrap}
+.badge{background:rgba(0,0,0,.35);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700}
+
+.body{padding:16px;display:flex;flex-direction:column;gap:12px;max-width:480px;margin:0 auto}
+
+/* STEP CARD */
+.card{background:#101018;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.07)}
+.card-top{display:flex;align-items:center;gap:13px;padding:16px 16px 12px}
+.num{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#6d28d9,#db2777);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;flex-shrink:0}
+.card-title{font-size:16px;font-weight:800;line-height:1.25}
+.card-sub{font-size:11px;color:#6060a0;margin-top:3px;font-weight:500}
+.card-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:9px}
+.card-body p{font-size:13px;color:#9090b8;line-height:1.7}
+.card-body strong{color:#d8d8f0}
+
+/* BIG LINK BUTTON */
+.go-btn{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6d28d9,#db2777);border-radius:14px;padding:14px 16px;text-decoration:none;color:#fff;font-weight:800;font-size:15px;box-shadow:0 4px 20px rgba(109,40,217,.4)}
+.go-btn:active{opacity:.85;transform:scale(.98)}
+.go-ico{font-size:22px;flex-shrink:0}
+.go-info{display:flex;flex-direction:column}
+.go-title{font-size:14px;font-weight:800}
+.go-url{font-size:10px;opacity:.75;margin-top:1px;font-weight:500}
+
+/* STEPS LIST */
+.steps-list{display:flex;flex-direction:column;gap:0}
+.si{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.si:last-child{border-bottom:none;padding-bottom:0}
+.si-n{width:22px;height:22px;border-radius:50%;background:#1e1e32;border:1px solid #6d28d9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#a78bfa;flex-shrink:0;margin-top:1px}
+.si-t{font-size:13px;color:#9090b8;line-height:1.6;flex:1}
+.si-t strong{color:#e0e0ff}
+
+/* COMMAND */
+.cmd{background:#000;border:1px solid #1a1a2e;border-radius:10px;padding:10px 13px;font-family:'Courier New',monospace;font-size:11px;color:#4ade80;line-height:1.7;word-break:break-all}
+.cmd-label{font-size:10px;color:#4040a0;font-weight:700;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+
+/* ALERTS */
+.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:10px;padding:11px 13px;font-size:12px;color:#fbbf24;line-height:1.6}
+.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:11px 13px;font-size:12px;color:#34d399;line-height:1.6}
+.info{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:11px 13px;font-size:12px;color:#a5b4fc;line-height:1.6}
+
+/* SECRET BOX */
+.secret{background:#050510;border:1px solid rgba(109,40,217,.35);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.secret-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.secret-name{font-size:11px;font-weight:800;color:#7c3aed;font-family:'Courier New',monospace}
+.secret-val{font-size:11px;color:#c4b5fd;font-family:'Courier New',monospace;text-align:right;flex:1;word-break:break-all}
+.s-div{height:1px;background:rgba(109,40,217,.15)}
+
+/* FINAL */
+.final{background:linear-gradient(135deg,rgba(109,40,217,.18),rgba(219,39,119,.12));border:1px solid rgba(109,40,217,.3);border-radius:20px;padding:24px;text-align:center}
+.final .emoji{font-size:48px;margin-bottom:10px}
+.final h2{font-size:20px;font-weight:900;margin-bottom:8px}
+.final p{font-size:13px;color:#7878a8;line-height:1.75}
+
+.divider{height:1px;background:rgba(255,255,255,.05)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="logo">📱</div>
+  <h1>Sirf Phone Se<br>PlayStore Pe!</h1>
+  <p>Computer bilkul nahi chahiye<br>Sab kuch phone ke browser se ho jayega</p>
+  <div class="badge-row">
+    <div class="badge">⏱️ 15-20 Min</div>
+    <div class="badge">💸 $25 One-Time</div>
+    <div class="badge">🆓 Build Free</div>
+  </div>
+</div>
+
+<div class="body">
+
+  <!-- STEP 1 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">1</div>
+      <div>
+        <div class="card-title">GitHub Account Banao</div>
+        <div class="card-sub">Free • 2 minutes</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <a class="go-btn" href="https://github.com/signup" target="_blank">
+        <span class="go-ico">🐙</span>
+        <div class="go-info">
+          <span class="go-title">GitHub Pe Sign Up Karo</span>
+          <span class="go-url">github.com/signup</span>
+        </div>
+      </a>
+      <p>Email, username, password bharo → verify karo → done!<br>
+      <strong>Yahan tumhara app store hoga aur APK cloud pe build hoga — bilkul free!</strong></p>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">2</div>
+      <div>
+        <div class="card-title">New Repository Banao</div>
+        <div class="card-sub">App ka ghar banao GitHub pe</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">GitHub mein login karo</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t">Top-right pe <strong>+</strong> icon tap karo</div></div>
+        <div class="si"><div class="si-n">3</div><div class="si-t"><strong>New repository</strong> select karo</div></div>
+        <div class="si"><div class="si-n">4</div><div class="si-t">Name mein likho: <strong>captionex-pro</strong></div></div>
+        <div class="si"><div class="si-n">5</div><div class="si-t"><strong>Public</strong> select karo</div></div>
+        <div class="si"><div class="si-n">6</div><div class="si-t">Green button <strong>"Create repository"</strong> dabao</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">3</div>
+      <div>
+        <div class="card-title">ZIP Extract Karke Files Upload Karo</div>
+        <div class="card-sub">Sab files ek baar mein upload</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p><strong>Pehle ZIP extract karo:</strong></p>
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">Phone ki <strong>Files app</strong> kholo → Download folder mein jao</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t"><strong>CaptioneX_Phone_Upload.zip</strong> tap karo → Extract karo</div></div>
+      </div>
+      <div class="divider"></div>
+      <p style="margin-top:4px"><strong>GitHub pe upload karo:</strong></p>
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">Apna repository kholo → <strong>"uploading an existing file"</strong> tap karo</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t"><strong>"choose your files"</strong> tap karo</div></div>
+        <div class="si"><div class="si-n">3</div><div class="si-t">Extracted folder ke andar jaao → <strong>sab files + folders select karo</strong> (android, www, .github folders bhi)</div></div>
+        <div class="si"><div class="si-n">4</div><div class="si-t">Upload hone do (thoda time lagega)</div></div>
+        <div class="si"><div class="si-n">5</div><div class="si-t">Neeche <strong>"Commit changes"</strong> green button dabao</div></div>
+      </div>
+      <div class="warn">⚠️ <strong>.github</strong> folder bhi upload karna zaroori hai — isme build instructions hain! Kuch phones mein hidden folders dikhte nahi, use "Show hidden files" option enable karo.</div>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">4</div>
+      <div>
+        <div class="card-title">4 Secret Values Add Karo</div>
+        <div class="card-sub">SECRETS_COPY_KARO.txt file mein hain</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Repository mein:<br><strong>Settings → Secrets and variables → Actions → New repository secret</strong></p>
+      <p>Yeh 4 secrets ek ek karke add karo:</p>
+      <div class="secret">
+        <div class="secret-row"><span class="secret-name">KEYSTORE_BASE64</span><span class="secret-val">File se copy karo →</span></div>
+        <div class="s-div"></div>
+        <div class="secret-row"><span class="secret-name">STORE_PASS</span><span class="secret-val">CaptionEx@2024</span></div>
+        <div class="s-div"></div>
+        <div class="secret-row"><span class="secret-name">KEY_ALIAS</span><span class="secret-val">captionex</span></div>
+        <div class="s-div"></div>
+        <div class="secret-row"><span class="secret-name">KEY_PASS</span><span class="secret-val">CaptionEx@2024</span></div>
+      </div>
+      <div class="info">📄 KEYSTORE_BASE64 ki value <strong>SECRETS_COPY_KARO.txt</strong> file mein hai — wahan se copy karo (bahut lamba text hai)</div>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">5</div>
+      <div>
+        <div class="card-title">APK Build Karo!</div>
+        <div class="card-sub">GitHub cloud pe automatically build hoga ☁️</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">Repository mein <strong>Actions</strong> tab tap karo</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t"><strong>"Build APK for PlayStore"</strong> workflow dikhega</div></div>
+        <div class="si"><div class="si-n">3</div><div class="si-t">Right side pe <strong>"Run workflow"</strong> button tap karo → phir <strong>"Run workflow"</strong> confirm karo</div></div>
+        <div class="si"><div class="si-n">4</div><div class="si-t">⏳ <strong>5-10 minute</strong> wait karo — phone band rakh sakte ho!</div></div>
+        <div class="si"><div class="si-n">5</div><div class="si-t">Green ✅ checkmark aaye → Click karo → neeche <strong>Artifacts</strong> section mein <strong>CaptioneX-AAB-PlayStore</strong> download karo</div></div>
+      </div>
+      <div class="ok">✅ .aab file download ho gayi? Yeh PlayStore ke liye ready file hai!</div>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">6</div>
+      <div>
+        <div class="card-title">Google Play Console Pe Upload</div>
+        <div class="card-sub">$25 ek baar • Phir hamesha free</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <a class="go-btn" href="https://play.google.com/console" target="_blank">
+        <span class="go-ico">▶️</span>
+        <div class="go-info">
+          <span class="go-title">Play Console Kholo</span>
+          <span class="go-url">play.google.com/console</span>
+        </div>
+      </a>
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">Google account se sign in karo → <strong>$25 pay karo</strong> (card se, ek baar)</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t"><strong>"Create app"</strong> button dabao</div></div>
+        <div class="si"><div class="si-n">3</div><div class="si-t">App name: <strong>CaptioneX Pro - Caption Maker</strong></div></div>
+        <div class="si"><div class="si-n">4</div><div class="si-t">Category: <strong>Video Players & Editors</strong> → Free</div></div>
+        <div class="si"><div class="si-n">5</div><div class="si-t">Left menu: <strong>Production → Releases → Create new release</strong></div></div>
+        <div class="si"><div class="si-n">6</div><div class="si-t">GitHub se download ki .aab file upload karo</div></div>
+        <div class="si"><div class="si-n">7</div><div class="si-t">App description copy karo <strong>PLAYSTORE_LISTING.txt</strong> se</div></div>
+        <div class="si"><div class="si-n">8</div><div class="si-t">Screenshots add karo (app ke 2-3 screen captures)</div></div>
+        <div class="si"><div class="si-n">9</div><div class="si-t"><strong>Submit for review! 🚀</strong></div></div>
+      </div>
+      <div class="warn">📸 Screenshots ke liye: CaptioneX Pro browser mein kholo → phone ke Screenshot button se capture karo</div>
+      <div class="info">⏱️ Pehla review 1-3 din mein hota hai. Uske baad updates same din live hote hain!</div>
+    </div>
+  </div>
+
+  <!-- BONUS -->
+  <div class="card">
+    <div class="card-top">
+      <div class="num">⚡</div>
+      <div>
+        <div class="card-title">Aur Bhi Aasaan Option</div>
+        <div class="card-sub">PWABuilder — seedha APK bina coding ke</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <p>Agar GitHub steps complex lage:</p>
+      <a class="go-btn" href="https://www.pwabuilder.com" target="_blank">
+        <span class="go-ico">🔨</span>
+        <div class="go-info">
+          <span class="go-title">PWABuilder — Free APK</span>
+          <span class="go-url">pwabuilder.com</span>
+        </div>
+      </a>
+      <div class="steps-list">
+        <div class="si"><div class="si-n">1</div><div class="si-t">Apni app ka GitHub Pages URL enter karo</div></div>
+        <div class="si"><div class="si-n">2</div><div class="si-t"><strong>Package for stores → Android → Download</strong></div></div>
+        <div class="si"><div class="si-n">3</div><div class="si-t">APK/AAB ready! PlayStore pe upload karo</div></div>
+      </div>
+      <div class="ok">✅ GitHub Pages enable karo: Repository → Settings → Pages → main branch → Save</div>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="final">
+    <div class="emoji">🎉</div>
+    <h2>All the Best Bhai!</h2>
+    <p>Koi bhi step mein atak jao<br>toh error screenshot lo aur Claude se poochho!<br><br>
+    <strong>App live ho gayi?</strong><br>Play Store link zaroor share karna — proud moment hai! 🚀</p>
+  </div>
+
+</div>
+</body>
+</html>

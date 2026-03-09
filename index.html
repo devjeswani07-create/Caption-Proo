@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#09090f">
+<meta name="description" content="CaptioneX Pro — 300+ Caption Styles, AI Voice Detection, 8 Languages">
+<title>CaptioneX Pro</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CaptioneX">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+:root{
+  --bg:#09090f;--s1:#101018;--s2:#181826;--s3:#20202e;--s4:#2c2c3e;--s5:#383852;
+  --acc:#6d28d9;--viv:#8b5cf6;--pk:#ec4899;--cyan:#06b6d4;--gold:#f59e0b;
+  --grn:#10b981;--red:#ef4444;--warn:#f59e0b;
+  --txt:#f0f0ff;--t2:#7878a8;--t3:#3c3c58;--t4:#28283e;
+  --r:16px;--rsm:10px;--rlg:22px;--rxl:28px;
+  --font:'DM Sans',sans-serif;--head:'Syne',sans-serif;--mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+  --sh:0 8px 32px rgba(0,0,0,.6);
+}
+body[data-theme=light]{--bg:#f0f0f8;--s1:#fff;--s2:#f6f6fc;--s3:#eaeaf6;--s4:#dcdcf0;--s5:#ccccee;--txt:#0d0d1a;--t2:#606090;--t3:#aaaacc;--t4:#ccccee}
+body[data-theme=amoled]{--bg:#000;--s1:#080808;--s2:#0c0c0c;--s3:#101010;--s4:#161616;--s5:#1c1c1c}
+body[data-theme=ocean]{--bg:#010e1c;--s1:#031524;--s2:#051e30;--s3:#07283e;--s4:#0a334e;--acc:#0369a1;--viv:#0ea5e9;--pk:#38bdf8;--cyan:#67e8f9}
+body[data-theme=rose]{--bg:#0f0208;--s1:#180410;--s2:#200616;--s3:#2a081e;--s4:#360a28;--acc:#9d174d;--viv:#ec4899;--pk:#f9a8d4;--cyan:#fda4af}
+body[data-theme=forest]{--bg:#010d04;--s1:#031408;--s2:#051c0c;--s3:#072612;--s4:#0a3018;--acc:#15803d;--viv:#22c55e;--pk:#4ade80;--cyan:#6ee7b7}
+
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeSpeed}
+::-webkit-scrollbar{width:2px;height:2px}
+::-webkit-scrollbar-thumb{background:var(--s5);border-radius:2px}
+
+/* ═══════════ SPLASH ═══════════ */
+#splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 30% 20%,#2d1366 0%,#09090f 55%),radial-gradient(ellipse at 80% 80%,#1a0533 0%,transparent 50%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity .5s var(--ease)}
+#splash.out{opacity:0;pointer-events:none}
+.spl-logo{width:90px;height:90px;border-radius:26px;background:linear-gradient(135deg,var(--acc),var(--pk));display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 60px rgba(109,40,217,.6),0 20px 40px rgba(0,0,0,.5);animation:logoIn .6s var(--spring) .2s both}
+@keyframes logoIn{from{opacity:0;transform:scale(.6) rotate(-10deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.spl-title{font-family:var(--head);font-size:32px;font-weight:800;margin-top:20px;background:linear-gradient(135deg,#fff 40%,var(--viv));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:fadeUp .5s var(--ease) .5s both}
+.spl-sub{font-size:13px;color:rgba(255,255,255,.38);margin-top:6px;animation:fadeUp .5s var(--ease) .65s both}
+.spl-dots{display:flex;gap:7px;margin-top:32px;animation:fadeUp .5s var(--ease) .8s both}
+.spl-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.18)}
+.spl-dot.a{background:var(--viv);animation:dotPulse 1.4s ease .9s infinite}
+.spl-dot:nth-child(2).a{animation-delay:1.1s}
+.spl-dot:nth-child(3).a{animation-delay:1.3s}
+@keyframes dotPulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════ APP SHELL ═══════════ */
+#app{height:100dvh;display:flex;flex-direction:column;opacity:0;transition:opacity .35s var(--ease)}
+#app.on{opacity:1}
+
+/* ═══════════ TOPBAR ═══════════ */
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;background:var(--s1);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;position:relative;z-index:10}
+.top::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--viv),transparent);opacity:.3}
+.brand{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.brand-ico{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--pk));display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 12px rgba(109,40,217,.4)}
+.brand-name{font-family:var(--head);font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--txt) 40%,var(--viv));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top-right{display:flex;gap:7px;align-items:center}
+.tp{padding:6px 12px;border-radius:20px;border:none;font-family:var(--font);font-weight:700;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;user-select:none;transition:transform .1s,opacity .1s;letter-spacing:.2px}
+.tp:active{transform:scale(.9)}
+.tpgold{background:linear-gradient(135deg,var(--gold),#f97316);color:#000}
+.tppurp{background:linear-gradient(135deg,var(--acc),var(--viv));color:#fff}
+
+/* ═══════════ PAGES ═══════════ */
+.pages{flex:1;overflow:hidden;position:relative}
+.pg{position:absolute;inset:0;overflow-y:auto;display:none;flex-direction:column;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.pg.on{display:flex;animation:pgIn .2s var(--ease)}
+@keyframes pgIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ═══════════ VIDEO ZONE ═══════════ */
+.vzone{background:#000;position:relative;flex-shrink:0;height:44svh;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:pointer;contain:strict}
+#vid{width:100%;height:100%;object-fit:contain;display:none}
+.vzph{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px;pointer-events:none;user-select:none;animation:fadeUp .4s var(--ease)}
+.vzph-ring{width:72px;height:72px;border-radius:20px;border:2px dashed rgba(139,92,246,.5);background:rgba(109,40,217,.12);display:flex;align-items:center;justify-content:center;font-size:28px;transition:all .25s}
+.vzone:hover .vzph-ring,.vzone:focus .vzph-ring{border-color:var(--viv);background:rgba(109,40,217,.22);transform:scale(1.06)}
+.vzph-title{font-size:14px;font-weight:600;color:var(--t2)}
+.vzph-sub{font-size:11px;color:var(--t3)}
+
+/* Caption overlay */
+.cap-ov{position:absolute;left:50%;transform:translateX(-50%);width:92%;text-align:center;pointer-events:none;bottom:64px;transition:bottom .28s var(--ease);z-index:5}
+#capdsp{display:inline-block;padding:8px 18px;border-radius:8px;font-size:18px;font-weight:600;line-height:1.45;color:#fff;background:rgba(0,0,0,.82);word-break:break-word;max-width:100%;will-change:contents;transition:opacity .15s;min-height:0}
+#capdsp:empty{opacity:0;padding:0}
+
+/* Video controls */
+.vctrl{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.95));display:none;flex-direction:column;gap:6px;padding:6px 14px 14px;z-index:6}
+.vctrl.on{display:flex}
+.tl-row{display:flex;align-items:center;gap:8px}
+.tl{flex:1;height:22px;display:flex;align-items:center;position:relative;cursor:pointer;touch-action:none}
+.tl-bg{position:absolute;left:0;right:0;height:4px;background:rgba(255,255,255,.2);border-radius:4px}
+.tl-buf{position:absolute;left:0;height:4px;background:rgba(255,255,255,.3);border-radius:4px;width:0;pointer-events:none}
+.tl-fill{position:absolute;left:0;height:4px;background:linear-gradient(90deg,var(--viv),var(--pk));border-radius:4px;width:0;pointer-events:none;will-change:width}
+.tl-dot{position:absolute;width:14px;height:14px;background:#fff;border-radius:50%;top:50%;margin-top:-7px;transform:translateX(-50%);left:0;will-change:left;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.8),0 0 0 3px rgba(139,92,246,.4)}
+.tlbl{color:rgba(255,255,255,.75);font-size:10px;font-family:var(--mono);white-space:nowrap;flex-shrink:0}
+.ctrl-row{display:flex;align-items:center;justify-content:center;gap:6px}
+.vb{background:rgba(255,255,255,.1);backdrop-filter:blur(8px);border:none;color:#fff;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background .12s,transform .1s;flex-shrink:0;user-select:none;-webkit-user-select:none}
+.vb:active{background:rgba(255,255,255,.25);transform:scale(.85)!important}
+.vb.xs{width:30px;height:30px;font-size:13px}
+.vb.sm{width:36px;height:36px;font-size:15px}
+.vb.md{width:44px;height:44px;font-size:20px;background:rgba(255,255,255,.14)}
+.vb.lg{width:52px;height:52px;font-size:22px;background:linear-gradient(135deg,var(--acc),var(--pk));box-shadow:0 0 20px rgba(139,92,246,.6)}
+.vb.skp{flex-direction:column;gap:1px;font-size:14px}
+.skn{font-size:7px;font-weight:800;opacity:.7;line-height:1}
+.speed-chip{padding:3px 8px;background:rgba(255,255,255,.12);border:none;border-radius:10px;color:rgba(255,255,255,.8);font-family:var(--mono);font-size:10px;cursor:pointer;user-select:none}
+
+/* ═══════════ EDITOR PANELS ═══════════ */
+.panels{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.pnl{background:var(--s1);border-radius:var(--r);border:1px solid rgba(255,255,255,.05);padding:13px;position:relative;overflow:hidden}
+.pnl::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.25),transparent)}
+.phdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+.ptit{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.plnk{font-size:11px;color:var(--viv);font-weight:700;cursor:pointer;padding:3px 8px;background:rgba(139,92,246,.12);border-radius:8px;user-select:none;transition:background .15s}
+.plnk:active{background:rgba(139,92,246,.25)}
+
+/* Caption Input */
+.irow{display:flex;gap:7px}
+.cap-in{flex:1;background:var(--s2);border:1.5px solid rgba(255,255,255,.07);border-radius:var(--rsm);padding:10px 13px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.cap-in:focus{border-color:var(--viv)}
+.cap-in::placeholder{color:var(--t3)}
+.ib{width:40px;height:40px;border-radius:var(--rsm);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;transition:transform .12s,opacity .12s;flex-shrink:0;user-select:none}
+.ib:active{transform:scale(.87)}
+.ib-mic{background:var(--s3);color:var(--txt)}
+.ib-mic.on{background:var(--red);animation:pulse 1.2s ease infinite}
+.ib-add{background:linear-gradient(135deg,var(--acc),var(--viv));color:#fff;font-size:22px}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{opacity:.85;box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+
+/* Lang chips */
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.chip{padding:4px 10px;border-radius:18px;font-size:11px;font-weight:700;background:var(--s2);border:1px solid rgba(255,255,255,.07);cursor:pointer;color:var(--t2);transition:all .15s;user-select:none}
+.chip.on{background:var(--viv);border-color:var(--viv);color:#fff}
+.chip:active{transform:scale(.93)}
+
+/* AI detect button */
+.ai-btn{width:100%;margin-top:10px;padding:11px;background:linear-gradient(135deg,rgba(109,40,217,.14),rgba(236,72,153,.1));border:1px solid rgba(109,40,217,.28);border-radius:var(--rsm);color:var(--txt);font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;user-select:none}
+.ai-btn.on{border-color:var(--grn);color:var(--grn);animation:pulse 1.5s ease infinite}
+
+/* Style Grid Quick */
+.sg3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:190px;overflow-y:auto;overscroll-behavior:contain}
+.scard{background:var(--s2);border:1.5px solid rgba(255,255,255,.06);border-radius:var(--rsm);padding:7px 5px;cursor:pointer;text-align:center;transition:border-color .15s,transform .1s;user-select:none}
+.scard.on{border-color:var(--viv);background:rgba(109,40,217,.15)}
+.scard:active{transform:scale(.92)}
+.sprv{font-size:10px;height:26px;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:4px;margin-bottom:4px}
+.snm{font-size:9px;color:var(--t2);font-weight:500}
+
+/* Sliders */
+.sl-row{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.sl-row:last-child{margin-bottom:0}
+.sl-lbl{font-size:11px;color:var(--t2);width:68px;flex-shrink:0;font-weight:600}
+input[type=range]{flex:1;-webkit-appearance:none;height:4px;border-radius:4px;background:var(--s3);outline:none;cursor:pointer;accent-color:var(--viv)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;background:var(--viv);border-radius:50%;box-shadow:0 0 6px rgba(139,92,246,.6);transition:transform .1s}
+input[type=range]::-webkit-slider-thumb:active{transform:scale(1.2)}
+.sl-val{font-size:10px;color:var(--viv);font-family:var(--mono);width:28px;text-align:right}
+
+/* Color dots */
+.crow{display:flex;gap:6px;flex-wrap:wrap}
+.cdot{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s,border-color .12s;flex-shrink:0}
+.cdot.on{border-color:#fff;transform:scale(1.25)}
+.cdot:active{transform:scale(.9)}
+
+/* Caption list */
+.cap-list{display:flex;flex-direction:column;gap:5px}
+.ci{display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:var(--rsm);padding:8px 11px;transition:background .12s}
+.ci:active{background:var(--s3)}
+.ci-t{font-size:10px;color:var(--viv);font-family:var(--mono);width:38px;flex-shrink:0;font-weight:700}
+.ci-x{flex:1;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:var(--txt)}
+.ci-edit{background:none;border:none;color:var(--t2);font-size:13px;cursor:pointer;padding:2px 4px;border-radius:4px;transition:color .12s}
+.ci-del{background:none;border:none;color:var(--t3);font-size:13px;cursor:pointer;padding:2px 4px;border-radius:4px;transition:color .12s}
+.ci-del:hover{color:var(--red)}
+.ci-e{text-align:center;color:var(--t3);font-size:12px;padding:18px 0;line-height:1.8}
+
+/* ═══════════ STYLES PAGE ═══════════ */
+.stp{padding:12px}
+.srch-wrap{position:relative;margin-bottom:12px}
+.srch{width:100%;background:var(--s1);border:1.5px solid rgba(255,255,255,.07);border-radius:var(--rsm);padding:10px 13px 10px 38px;color:var(--txt);font-family:var(--font);font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.srch:focus{border-color:var(--viv)}
+.srch-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.5}
+.cat-tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
+.cat-tabs::-webkit-scrollbar{height:0}
+.ctab{padding:5px 12px;border-radius:18px;font-size:11px;font-weight:700;background:var(--s2);border:1px solid rgba(255,255,255,.06);cursor:pointer;color:var(--t2);white-space:nowrap;user-select:none;transition:all .15s}
+.ctab.on{background:var(--viv);border-color:var(--viv);color:#fff}
+.cat-head{font-size:10px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:.9px;margin:12px 0 7px}
+.sg2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.slg{background:var(--s1);border:1.5px solid rgba(255,255,255,.05);border-radius:var(--r);padding:13px;cursor:pointer;transition:border-color .15s,transform .1s;position:relative;overflow:hidden;user-select:none}
+.slg:active{transform:scale(.96)}
+.slg.on{border-color:var(--viv)}
+.slg-glow{position:absolute;inset:0;opacity:0;transition:opacity .2s;background:radial-gradient(ellipse at 50% 0%,rgba(139,92,246,.15) 0%,transparent 70%)}
+.slg.on .slg-glow{opacity:1}
+.prob{position:absolute;top:7px;right:7px;background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px;letter-spacing:.3px}
+.slg-prv{font-size:13px;min-height:30px;display:flex;align-items:center;margin-bottom:6px;border-radius:5px;padding:3px 7px;overflow:hidden}
+.slg-nm{font-size:10px;color:var(--t2);font-weight:500}
+
+/* ═══════════ AI PAGE ═══════════ */
+.aip{padding:13px;display:flex;flex-direction:column;gap:11px}
+.ai-hero{background:linear-gradient(135deg,rgba(109,40,217,.16),rgba(236,72,153,.1));border:1px solid rgba(109,40,217,.25);border-radius:var(--rlg);padding:22px;text-align:center;position:relative;overflow:hidden}
+.ai-hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 50% 50%,rgba(139,92,246,.1) 0%,transparent 60%);animation:heroGlow 4s ease-in-out infinite}
+@keyframes heroGlow{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.1)}}
+.ai-hero h2{font-family:var(--head);font-size:22px;font-weight:800;margin-bottom:7px;position:relative}
+.ai-hero p{font-size:12px;color:var(--t2);line-height:1.75;position:relative}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ai-fc{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:13px;position:relative;overflow:hidden}
+.ai-fc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--acc),var(--pk));opacity:.5}
+.ai-fi{font-size:22px;margin-bottom:5px}
+.ai-ft{font-size:12px;font-weight:700;margin-bottom:2px;font-family:var(--head)}
+.ai-fd{font-size:10px;color:var(--t2);line-height:1.5}
+.ai-rec{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--rlg);padding:22px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.wf{display:flex;align-items:center;gap:3px;height:46px}
+.wb{width:4px;border-radius:4px;background:linear-gradient(to top,var(--acc),var(--pk));height:4px;will-change:height,opacity}
+.wf.on .wb{animation:waveBar .75s ease infinite}
+.wb:nth-child(1){animation-delay:0s}.wb:nth-child(2){animation-delay:.06s}.wb:nth-child(3){animation-delay:.12s}
+.wb:nth-child(4){animation-delay:.18s}.wb:nth-child(5){animation-delay:.24s}.wb:nth-child(6){animation-delay:.12s}
+.wb:nth-child(7){animation-delay:.06s}.wb:nth-child(8){animation-delay:0s}.wb:nth-child(9){animation-delay:.06s}
+.wb:nth-child(10){animation-delay:.12s}.wb:nth-child(11){animation-delay:.18s}.wb:nth-child(12){animation-delay:.24s}
+@keyframes waveBar{0%,100%{height:4px;opacity:.3}50%{height:36px;opacity:1}}
+.ai-lbl{font-size:12px;color:var(--t2);text-align:center;line-height:1.6}
+.ai-big-btn{width:100%;padding:14px;border-radius:var(--rsm);background:linear-gradient(135deg,var(--acc),var(--pk));border:none;color:#fff;font-family:var(--head);font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 6px 24px rgba(109,40,217,.45);transition:transform .1s,box-shadow .2s;user-select:none;letter-spacing:.3px}
+.ai-big-btn:active{transform:scale(.97);box-shadow:0 3px 12px rgba(109,40,217,.3)}
+.tbx{background:var(--s2);border-radius:var(--rsm);padding:11px;font-size:12px;line-height:1.8;color:var(--txt);max-height:140px;overflow-y:auto;display:none;overscroll-behavior:contain}
+.tbx.on{display:block}
+.tbx-empty{color:var(--t3);font-style:italic}
+
+/* ═══════════ CREATE PAGE ═══════════ */
+.crp{padding:13px;display:flex;flex-direction:column;gap:11px}
+.cr-hero{background:linear-gradient(135deg,rgba(6,182,212,.12),rgba(16,185,129,.08));border:1px solid rgba(6,182,212,.2);border-radius:var(--rlg);padding:20px;text-align:center}
+.cr-hero h2{font-family:var(--head);font-size:20px;font-weight:800;margin-bottom:6px}
+.cr-hero p{font-size:12px;color:var(--t2);line-height:1.7}
+.cr-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cr-act{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:16px;cursor:pointer;text-align:center;transition:border-color .15s,transform .1s;user-select:none;position:relative;overflow:hidden}
+.cr-act:active{transform:scale(.96)}
+.cr-act.highlighted{border-color:var(--viv);background:rgba(109,40,217,.08)}
+.cr-act::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acc),var(--pk));opacity:0;transition:opacity .2s}
+.cr-act.highlighted::before{opacity:.06}
+.cr-aci{font-size:28px;margin-bottom:7px;display:block}
+.cr-act h3{font-size:13px;font-weight:700;margin-bottom:3px}
+.cr-act p{font-size:10px;color:var(--t2);line-height:1.5}
+.pro-badge-act{position:absolute;top:8px;right:8px;background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-size:8px;font-weight:900;padding:2px 6px;border-radius:6px}
+.export-card{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--rlg);padding:18px}
+.ec-title{font-size:14px;font-weight:700;margin-bottom:13px;font-family:var(--head)}
+.ec-opts{display:flex;flex-direction:column;gap:8px}
+.ec-opt{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;background:var(--s2);border-radius:var(--rsm);cursor:pointer;transition:background .15s;user-select:none}
+.ec-opt:active{background:var(--s3)}
+.ec-left{display:flex;align-items:center;gap:10px}
+.ec-ico{font-size:18px}
+.ec-name{font-size:13px;font-weight:600}
+.ec-desc{font-size:10px;color:var(--t2);margin-top:1px}
+.ec-right{font-size:11px;color:var(--viv);font-weight:700}
+
+/* ═══════════ PREMIUM PAGE ═══════════ */
+.prp{padding:13px;display:flex;flex-direction:column;gap:10px}
+.pr-hero{background:radial-gradient(ellipse at 50% 0%,rgba(245,158,11,.2) 0%,transparent 65%),var(--s1);border:1px solid rgba(245,158,11,.3);border-radius:var(--rlg);padding:26px;text-align:center}
+.pr-crown{font-size:52px;display:block;margin-bottom:10px;filter:drop-shadow(0 4px 12px rgba(245,158,11,.5))}
+.pr-h2{font-family:var(--head);font-size:24px;font-weight:800;background:linear-gradient(90deg,var(--gold),#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pr-sub{color:#8a6820;font-size:12px;margin-top:5px}
+.lt-card{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(249,115,22,.06));border:2px solid rgba(245,158,11,.45);border-radius:var(--rlg);padding:22px;text-align:center;position:relative;overflow:hidden}
+.lt-ribbon{position:absolute;top:0;right:0;background:linear-gradient(135deg,var(--red),#dc2626);color:#fff;font-size:9px;font-weight:900;padding:5px 14px;border-radius:0 var(--rlg) 0 var(--r);letter-spacing:.5px}
+.lt-name{font-family:var(--head);font-size:20px;font-weight:800;margin-bottom:4px}
+.lt-price{font-size:52px;font-weight:900;font-family:var(--head);color:var(--gold);line-height:1.1}
+.lt-price-note{font-size:10px;color:var(--t3);text-decoration:line-through;margin:2px 0}
+.lt-badge{display:inline-block;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--grn);font-size:12px;font-weight:800;padding:4px 12px;border-radius:20px;margin:8px 0 16px}
+.lt-feats{display:grid;grid-template-columns:1fr 1fr;gap:6px;text-align:left;margin-bottom:18px}
+.lt-f{font-size:11px;color:var(--t2);display:flex;gap:5px;align-items:flex-start}
+.lt-f-ic{color:var(--grn);font-size:10px;margin-top:1px;flex-shrink:0}
+.lt-btn{width:100%;padding:15px;border-radius:var(--rsm);border:none;background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-family:var(--head);font-weight:900;font-size:16px;cursor:pointer;box-shadow:0 6px 24px rgba(245,158,11,.4);transition:transform .1s,box-shadow .2s;user-select:none;letter-spacing:.3px}
+.lt-btn:active{transform:scale(.97)}
+.pr-feats{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:14px}
+.pr-ft{font-family:var(--head);font-size:15px;font-weight:800;margin-bottom:13px}
+.pfi{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.pfi:last-child{border-bottom:none}
+.pfic{width:36px;height:36px;border-radius:10px;background:rgba(109,40,217,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pfit h4{font-size:13px;font-weight:700;margin-bottom:2px}
+.pfit p{font-size:11px;color:var(--t2);line-height:1.5}
+
+/* ═══════════ SETTINGS PAGE ═══════════ */
+.setp{padding:13px;display:flex;flex-direction:column;gap:10px}
+.set-sec{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);overflow:hidden}
+.set-head{padding:11px 14px 6px;font-size:10px;font-weight:900;color:var(--t2);text-transform:uppercase;letter-spacing:1px}
+.si{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background .12s;user-select:none}
+.si:active{background:var(--s2)}
+.si-ic{font-size:17px;width:24px;text-align:center;flex-shrink:0}
+.si-tx{flex:1}
+.si-ti{font-size:13px;font-weight:500}
+.si-su{font-size:10px;color:var(--t2);margin-top:1px}
+.si-ar{color:var(--t3);font-size:15px}
+/* Toggle */
+.tog{position:relative;width:44px;height:24px;cursor:pointer;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0;position:absolute}
+.tog-sl{position:absolute;inset:0;background:var(--s4);border-radius:24px;transition:background .22s var(--ease)}
+.tog input:checked+.tog-sl{background:var(--viv)}
+.tog-sl::before{content:'';position:absolute;width:18px;height:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .22s var(--spring);box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.tog input:checked+.tog-sl::before{transform:translateX(20px)}
+.ni{display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.ni-ic{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.ni-tx{flex:1;font-size:13px}
+/* Theme grid */
+.tgrid{display:flex;gap:10px;padding:10px 14px 12px;border-top:1px solid rgba(255,255,255,.05);overflow-x:auto}
+.tgrid::-webkit-scrollbar{height:0}
+.tdot-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
+.tdot{width:44px;height:44px;border-radius:13px;cursor:pointer;border:2px solid transparent;transition:transform .15s var(--spring),border-color .15s;user-select:none}
+.tdot.on{border-color:#fff;transform:scale(1.12)}
+.tdot-lbl{font-size:9px;color:var(--t2);font-weight:600;white-space:nowrap}
+.set-range{display:flex;align-items:center;gap:9px;padding:10px 14px;border-top:1px solid rgba(255,255,255,.05)}
+.set-rlbl{font-size:11px;color:var(--t2);width:86px;flex-shrink:0;font-weight:600}
+
+/* ═══════════ PROFILE PAGE ═══════════ */
+.pfp{padding:13px;display:flex;flex-direction:column;gap:10px}
+.pf-card{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--rlg);padding:22px;text-align:center;position:relative;overflow:hidden}
+.pf-card::before{content:'';position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(180deg,rgba(109,40,217,.15),transparent)}
+.pf-av{width:68px;height:68px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,var(--acc),var(--pk));display:flex;align-items:center;justify-content:center;font-size:30px;position:relative;cursor:pointer;box-shadow:0 6px 20px rgba(109,40,217,.4)}
+.pf-ae{position:absolute;bottom:0;right:0;width:22px;height:22px;background:var(--viv);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;border:2px solid var(--s1)}
+.pf-nm{font-family:var(--head);font-size:18px;font-weight:800;cursor:pointer}
+.pf-pl{font-size:11px;color:var(--t2);margin-top:4px}
+.pf-pl span{color:var(--gold);cursor:pointer;font-weight:700}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sbox{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);padding:12px;text-align:center}
+.sn{font-size:22px;font-weight:800;color:var(--viv);font-family:var(--head)}
+.sl{font-size:9px;color:var(--t2);margin-top:2px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.mlist{background:var(--s1);border:1px solid rgba(255,255,255,.05);border-radius:var(--r);overflow:hidden}
+.mi{display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:background .12s;user-select:none}
+.mi:last-child{border-bottom:none}
+.mi:active{background:var(--s2)}
+.mi-ic{font-size:16px;width:22px;text-align:center;flex-shrink:0}
+.mi-tx{flex:1}
+.mi-ti{font-size:13px;font-weight:600}
+.mi-su{font-size:10px;color:var(--t2);margin-top:1px}
+.mi-ar{color:var(--t3);font-size:14px}
+
+/* ═══════════ AD BANNER ═══════════ */
+.ad{display:flex;align-items:center;gap:8px;margin:0 12px 8px;padding:8px 11px;background:rgba(109,40,217,.07);border:1px solid rgba(109,40,217,.15);border-radius:var(--rsm);flex-shrink:0}
+.ad-tag{font-size:8px;color:var(--t2);background:var(--s3);padding:2px 5px;border-radius:4px;font-weight:700;flex-shrink:0}
+.ad-txt{flex:1;font-size:11px;color:var(--t2)}
+.ad-cta{font-size:11px;color:var(--viv);font-weight:800;cursor:pointer;white-space:nowrap}
+.ad-x{font-size:14px;color:var(--t3);cursor:pointer;padding:2px 5px}
+
+/* ═══════════ BOTTOM NAV ═══════════ */
+.bnav{display:flex;background:var(--s1);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0);position:relative;z-index:10}
+.bnav::before{content:'';position:absolute;top:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.3),transparent)}
+.nbt{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 0;background:none;border:none;cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:opacity .1s;position:relative}
+.nbt:active{opacity:.5}
+.nb-ic{font-size:20px;transition:transform .2s var(--spring);line-height:1;filter:grayscale(.5);transition:filter .2s,transform .2s var(--spring)}
+.nbt.on .nb-ic{transform:scale(1.15);filter:grayscale(0)}
+.nb-lb{font-size:9px;color:var(--t3);font-weight:700;font-family:var(--font);transition:color .2s;letter-spacing:.2px}
+.nbt.on .nb-lb{color:var(--viv)}
+.nbt.on::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:2px;background:var(--viv);border-radius:0 0 3px 3px}
+/* Center create button */
+.nbt.center .nb-ic{width:46px;height:46px;border-radius:14px;font-size:20px;background:linear-gradient(135deg,var(--acc),var(--pk));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(109,40,217,.6),0 0 0 0 rgba(109,40,217,.3);margin-top:-7px;animation:centerPulse 3s ease-in-out infinite;filter:none!important}
+@keyframes centerPulse{0%,100%{box-shadow:0 4px 16px rgba(109,40,217,.6),0 0 0 0 rgba(109,40,217,.2)}50%{box-shadow:0 6px 20px rgba(109,40,217,.8),0 0 0 8px rgba(109,40,217,0)}}
+.nbt.center.on .nb-ic{box-shadow:0 6px 20px rgba(109,40,217,.9)!important}
+
+/* ═══════════ RENDER OVERLAY ═══════════ */
+.rov{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:900;flex-direction:column;align-items:center;justify-content:center;gap:18px;display:none;backdrop-filter:blur(12px)}
+.rov.on{display:flex;animation:pgIn .25s var(--ease)}
+.rov-ring{width:70px;height:70px;border-radius:50%;border:3px solid rgba(255,255,255,.07);border-top-color:var(--viv);animation:spin .85s linear infinite;will-change:transform;position:relative}
+.rov-ring::after{content:'';position:absolute;inset:4px;border-radius:50%;border:3px solid rgba(255,255,255,.04);border-bottom-color:var(--pk);animation:spin 1.3s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rov-pct{font-size:42px;font-weight:900;color:var(--viv);font-family:var(--mono);letter-spacing:-2px}
+.rov-bw{width:220px;height:5px;background:var(--s3);border-radius:5px;overflow:hidden}
+.rov-bf{height:100%;background:linear-gradient(90deg,var(--acc),var(--pk));width:0;border-radius:5px;will-change:width;transition:width .12s}
+.rov-msg{font-size:13px;color:var(--t2);text-align:center;line-height:1.7}
+.rov-cancel{padding:8px 22px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:20px;color:var(--red);font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;transition:background .15s}
+.rov-cancel:active{background:rgba(239,68,68,.25)}
+
+/* ═══════════ MODAL ═══════════ */
+.mlo{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:500;display:none;align-items:flex-end;backdrop-filter:blur(5px)}
+.mlo.on{display:flex}
+.mls{width:100%;background:var(--s1);border-radius:24px 24px 0 0;padding:0 0 env(safe-area-inset-bottom,0);max-height:86vh;overflow-y:auto;overscroll-behavior:contain;animation:slideUp .25s var(--ease);position:relative}
+.mls::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--viv),var(--pk),transparent);border-radius:24px 24px 0 0}
+@keyframes slideUp{from{transform:translateY(100%);opacity:.5}to{transform:translateY(0);opacity:1}}
+.ml-inner{padding:16px 16px 24px}
+.ml-hn{width:36px;height:4px;background:var(--s4);border-radius:4px;margin:0 auto 14px}
+.ml-ti{font-family:var(--head);font-size:18px;font-weight:800;margin-bottom:13px}
+.bf{width:100%;padding:13px;border-radius:var(--rsm);border:none;font-family:var(--font);font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px;transition:transform .1s,opacity .1s;user-select:none;display:block;text-align:center}
+.bf:active{transform:scale(.97)}
+.bf:last-child{margin-bottom:0}
+.ibox{background:var(--s2);border-radius:var(--rsm);padding:12px 13px;font-size:12px;color:var(--t2);line-height:1.9;margin-bottom:12px}
+.ibox strong{color:var(--txt)}
+
+/* ═══════════ TOAST ═══════════ */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(20,20,30,.95);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 16px;display:flex;align-items:center;gap:8px;font-size:12px;z-index:999;white-space:nowrap;max-width:calc(100vw - 32px);box-shadow:0 8px 32px rgba(0,0,0,.6),0 0 0 1px rgba(139,92,246,.15);transition:transform .25s var(--ease),opacity .25s;opacity:0;pointer-events:none;will-change:transform,opacity;backdrop-filter:blur(16px)}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+.toast-ic{font-size:15px;flex-shrink:0}
+.toast-msg{overflow:hidden;text-overflow:ellipsis}
+
+/* ═══════════ ONBOARDING ═══════════ */
+.onb{position:fixed;inset:0;z-index:8000;background:var(--bg);display:none;flex-direction:column;align-items:stretch}
+.onb.on{display:flex}
+.onb-slides{flex:1;overflow:hidden;position:relative}
+.onb-slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;gap:0;text-align:center;opacity:0;transform:translateX(100%);transition:all .4s var(--ease)}
+.onb-slide.on{opacity:1;transform:translateX(0)}
+.onb-slide.out{opacity:0;transform:translateX(-100%)}
+.onb-illo{font-size:80px;margin-bottom:24px;filter:drop-shadow(0 8px 24px rgba(109,40,217,.4))}
+.onb-title{font-family:var(--head);font-size:26px;font-weight:800;margin-bottom:12px;line-height:1.25}
+.onb-desc{font-size:14px;color:var(--t2);line-height:1.75;max-width:300px}
+.onb-foot{padding:24px 24px 32px;flex-shrink:0}
+.onb-dots{display:flex;gap:6px;justify-content:center;margin-bottom:20px}
+.onb-dot{width:6px;height:6px;border-radius:50%;background:var(--s4);transition:all .3s}
+.onb-dot.on{background:var(--viv);width:20px;border-radius:6px}
+.onb-next{width:100%;padding:16px;border-radius:var(--rsm);background:linear-gradient(135deg,var(--acc),var(--pk));border:none;color:#fff;font-family:var(--head);font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 6px 24px rgba(109,40,217,.45);transition:transform .1s;user-select:none}
+.onb-next:active{transform:scale(.97)}
+.onb-skip{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--t2);cursor:pointer;padding:6px;user-select:none}
+
+/* ═══════════ UTILS ═══════════ */
+.flex-center{display:flex;align-items:center;justify-content:center}
+.gap8{gap:8px}
+.sep{height:1px;background:rgba(255,255,255,.05);margin:0 -12px}
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div class="onb" id="onb">
+  <div class="onb-slides" id="onb-slides">
+    <div class="onb-slide on" id="os0">
+      <div class="onb-illo">✨</div>
+      <div class="onb-title">CaptioneX Pro mein<br>Aapka Swagat Hai!</div>
+      <div class="onb-desc">300+ caption styles, AI voice detection, 8 languages — sab ek jagah!</div>
+    </div>
+    <div class="onb-slide" id="os1">
+      <div class="onb-illo">🎙️</div>
+      <div class="onb-title">AI Se Captions<br>Auto Banao</div>
+      <div class="onb-desc">Bolte jaao — Hindi, English, Telugu, Tamil aur aur bhi languages mein real-time captions!</div>
+    </div>
+    <div class="onb-slide" id="os2">
+      <div class="onb-illo">🎨</div>
+      <div class="onb-title">300+ Stunning<br>Caption Styles</div>
+      <div class="onb-desc">Neon, Gradient, Bollywood, Glitch, Cinema — apni personality ke hisaab se choose karo!</div>
+    </div>
+    <div class="onb-slide" id="os3">
+      <div class="onb-illo">💾</div>
+      <div class="onb-title">Video Save Karo<br>Captions Ke Saath</div>
+      <div class="onb-desc">CapCut jaisi quality — captions video mein burn hoke directly phone mein save honge!</div>
+    </div>
+  </div>
+  <div class="onb-foot">
+    <div class="onb-dots">
+      <div class="onb-dot on"></div><div class="onb-dot"></div><div class="onb-dot"></div><div class="onb-dot"></div>
+    </div>
+    <button class="onb-next" onclick="onbNext()">Shuru Karte Hain →</button>
+    <span class="onb-skip" onclick="onbSkip()">Skip karo</span>
+  </div>
+</div>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="spl-logo">✨</div>
+  <div class="spl-title">CaptioneX</div>
+  <div class="spl-sub">300+ Styles · AI Powered · 8 Languages</div>
+  <div class="spl-dots">
+    <div class="spl-dot a"></div><div class="spl-dot a"></div><div class="spl-dot a"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span class="toast-ic" id="tic"></span><span class="toast-msg" id="tmsg"></span></div>
+
+<!-- RENDER OVERLAY -->
+<div class="rov" id="rov">
+  <div class="rov-ring"></div>
+  <div class="rov-pct" id="rovpct">0%</div>
+  <div class="rov-bw"><div class="rov-bf" id="rovbf"></div></div>
+  <div class="rov-msg" id="rovmsg">Video render ho raha hai...<br>Tab band mat karo 🙏</div>
+  <button class="rov-cancel" onclick="cancelRender()">✕ Cancel Karo</button>
+</div>
+
+<!-- MODAL -->
+<div class="mlo" id="mlo" onclick="mloClick(event)">
+  <div class="mls"><div class="ml-inner"><div class="ml-hn"></div><div id="mbd"></div></div></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+  <!-- TOPBAR -->
+  <div class="top">
+    <div class="brand" onclick="goPage('editor')">
+      <div class="brand-ico">✨</div>
+      <span class="brand-name">CaptioneX</span>
+    </div>
+    <div class="top-right">
+      <button class="tp tpgold" onclick="goPage('premium')">👑 ₹299</button>
+      <button class="tp tppurp" onclick="doExport()">💾 Save</button>
+    </div>
+  </div>
+
+  <div class="pages">
+
+    <!-- ══ PAGE: EDITOR ══ -->
+    <div class="pg on" id="page-editor">
+      <div class="vzone" id="vzone" onclick="vzClick()">
+        <video id="vid" playsinline preload="metadata"></video>
+        <div class="vzph" id="vzph">
+          <div class="vzph-ring">🎬</div>
+          <div class="vzph-title">Tap karke Video Import Karo</div>
+          <div class="vzph-sub">MP4 · MOV · AVI · WebM supported</div>
+        </div>
+        <div class="cap-ov" id="capov"><div id="capdsp"></div></div>
+        <div class="vctrl" id="vctrl">
+          <div class="tl-row">
+            <div class="tl" id="tl">
+              <div class="tl-bg"></div>
+              <div class="tl-buf" id="tlbuf"></div>
+              <div class="tl-fill" id="tlfil"></div>
+              <div class="tl-dot" id="tldot"></div>
+            </div>
+            <span class="tlbl" id="tlbl">0:00/0:00</span>
+          </div>
+          <div class="ctrl-row">
+            <button class="vb xs" onclick="onRestart()" title="Restart">⟳</button>
+            <button class="vb sm skp" onclick="onSkip(-10)"><span>⏪</span><span class="skn">10s</span></button>
+            <button class="vb sm skp" onclick="onSkip(-5)"><span>⏮</span><span class="skn">5s</span></button>
+            <button class="vb lg" id="playbtn" onclick="onPlay(event)">▶</button>
+            <button class="vb sm skp" onclick="onSkip(5)"><span>⏭</span><span class="skn">5s</span></button>
+            <button class="vb sm skp" onclick="onSkip(10)"><span>⏩</span><span class="skn">10s</span></button>
+            <button class="vb xs" id="mutebtn" onclick="onMute()">🔊</button>
+            <button class="speed-chip" id="speedbtn" onclick="cycleSpeed()">1x</button>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="fin" accept="video/*" style="display:none" onchange="onFile(this)">
+
+      <div class="panels">
+
+        <!-- Caption Input Panel -->
+        <div class="pnl">
+          <div class="phdr"><span class="ptit">✏️ Caption Add Karo</span></div>
+          <div class="irow">
+            <input class="cap-in" id="cap-in" placeholder="Yahan caption likho ya mic se bolo..." maxlength="250"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();onAdd(null);}">
+            <button class="ib ib-mic" id="micbtn" onclick="onMic()" title="Voice Input">🎤</button>
+            <button class="ib ib-add" onclick="onAdd(null)" title="Add Caption">＋</button>
+          </div>
+          <div style="margin-top:10px">
+            <div class="ptit" style="margin-bottom:8px">🌐 Language / Bhasha</div>
+            <div class="chips" id="langchips">
+              <span class="chip on" data-lang="hi-IN" onclick="onLang(this)">हिंदी</span>
+              <span class="chip" data-lang="en-US" onclick="onLang(this)">English</span>
+              <span class="chip" data-lang="hi-IN" onclick="onLang(this)">Hinglish</span>
+              <span class="chip" data-lang="te-IN" onclick="onLang(this)">తెలుగు</span>
+              <span class="chip" data-lang="ta-IN" onclick="onLang(this)">தமிழ்</span>
+              <span class="chip" data-lang="gu-IN" onclick="onLang(this)">ગુજ.</span>
+              <span class="chip" data-lang="pa-IN" onclick="onLang(this)">ਪੰਜਾਬੀ</span>
+              <span class="chip" data-lang="ru-RU" onclick="onLang(this)">Рус</span>
+            </div>
+          </div>
+          <button class="ai-btn" id="aibtn" onclick="onAIDet()">🤖 AI Auto-Detect — Bolte hi Caption Banega!</button>
+        </div>
+
+        <!-- Style Quick Panel -->
+        <div class="pnl">
+          <div class="phdr">
+            <span class="ptit">🎨 Caption Style</span>
+            <span class="plnk" onclick="goPage('styles')">Sab 300+ Dekho →</span>
+          </div>
+          <div class="sg3" id="qstyles"></div>
+        </div>
+
+        <!-- Customize Panel -->
+        <div class="pnl">
+          <div class="ptit" style="margin-bottom:11px">⚙️ Customize Karo</div>
+          <div class="sl-row">
+            <span class="sl-lbl">Font Size</span>
+            <input type="range" id="rsize" min="12" max="60" value="20" oninput="onSize(this.value)">
+            <span class="sl-val" id="vsize">20</span>
+          </div>
+          <div class="sl-row">
+            <span class="sl-lbl">Position</span>
+            <input type="range" id="rpos" min="5" max="90" value="22" oninput="onPos(this.value)">
+          </div>
+          <div class="sl-row" style="margin-bottom:11px">
+            <span class="sl-lbl">Opacity</span>
+            <input type="range" id="rop" min="20" max="100" value="92" oninput="onOp(this.value)">
+          </div>
+          <div class="sl-lbl" style="margin-bottom:7px">Text Color</div>
+          <div class="crow" id="tcols" style="margin-bottom:11px"></div>
+          <div class="sl-lbl" style="margin-bottom:7px">BG Color</div>
+          <div class="crow" id="bgcols"></div>
+        </div>
+
+        <!-- Timeline Panel -->
+        <div class="pnl">
+          <div class="phdr">
+            <span class="ptit">📋 Caption Timeline</span>
+            <span class="plnk" onclick="clearCaps()">Clear All</span>
+          </div>
+          <div class="cap-list" id="caplist"></div>
+          <div class="ci-e" id="capempty">Koi caption nahi hai.<br>Upar add karo ya mic se bolo ☝️</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PAGE: STYLES ══ -->
+    <div class="pg" id="page-styles">
+      <div class="stp">
+        <div class="srch-wrap">
+          <span class="srch-ico">🔍</span>
+          <input class="srch" id="srch" placeholder="300+ styles search karo... (neon, gradient, bollywood...)" oninput="onSrch(this.value)">
+        </div>
+        <div class="cat-tabs" id="cattabs"></div>
+        <div id="styleslist"></div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: AI ══ -->
+    <div class="pg" id="page-ai">
+      <div class="aip">
+        <div class="ai-hero">
+          <h2>🤖 AI Caption Engine</h2>
+          <p>Real-time speech detection · 8 languages · Automatic timing · 300+ styles with AI</p>
+        </div>
+        <div class="ai-grid">
+          <div class="ai-fc"><div class="ai-fi">⚡</div><div class="ai-ft">Real-time</div><div class="ai-fd">Bolte hi instantly caption appear hota hai</div></div>
+          <div class="ai-fc"><div class="ai-fi">🌐</div><div class="ai-ft">8 Languages</div><div class="ai-fd">Hindi, English, Telugu, Tamil aur aur bhi</div></div>
+          <div class="ai-fc"><div class="ai-fi">🎯</div><div class="ai-ft">Auto Timing</div><div class="ai-fd">Video ke saath perfect sync hota hai</div></div>
+          <div class="ai-fc"><div class="ai-fi">🎨</div><div class="ai-ft">Auto Style</div><div class="ai-fd">300+ styles mein se best choose hota hai</div></div>
+        </div>
+        <div class="ai-rec">
+          <div class="wf" id="wf">
+            <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+            <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+            <div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div>
+          </div>
+          <div class="ai-lbl" id="ailbl">Ready hai · Shuru karne ke liye button dabao</div>
+          <button class="ai-big-btn" id="aipg" onclick="onAIPage()">🎙️  AI Detection Shuru Karo</button>
+        </div>
+        <div class="tbx tbx-empty" id="tbx">Detected captions yahan dikhenge...</div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: CREATE / EXPORT ══ -->
+    <div class="pg" id="page-create">
+      <div class="crp">
+        <div class="cr-hero">
+          <h2>🎬 Create & Export</h2>
+          <p>Professional quality video banao · CapCut jaisi editing · Direct phone mein save karo</p>
+        </div>
+        <div class="cr-actions">
+          <div class="cr-act highlighted" onclick="doExport()">
+            <span class="cr-aci">🎬</span>
+            <h3>Render & Save</h3>
+            <p>Captions burn karke video save karo</p>
+          </div>
+          <div class="cr-act" onclick="goPage('premium')">
+            <div class="pro-badge-act">PRO</div>
+            <span class="cr-aci">📱</span>
+            <h3>4K Export</h3>
+            <p>Ultra HD quality, no watermark</p>
+          </div>
+          <div class="cr-act" onclick="vzClick()">
+            <span class="cr-aci">📂</span>
+            <h3>Video Import</h3>
+            <p>Nayi video select karo</p>
+          </div>
+          <div class="cr-act" onclick="goPage('premium')">
+            <div class="pro-badge-act">PRO</div>
+            <span class="cr-aci">✂️</span>
+            <h3>Trim Video</h3>
+            <p>Video cut karo (coming soon)</p>
+          </div>
+        </div>
+        <div class="export-card">
+          <div class="ec-title">Export Options</div>
+          <div class="ec-opts">
+            <div class="ec-opt" onclick="doExport()">
+              <div class="ec-left">
+                <div class="ec-ico">🎬</div>
+                <div><div class="ec-name">HD Export (Free)</div><div class="ec-desc">720p · WebM format · Captions burned in</div></div>
+              </div>
+              <div class="ec-right">Free →</div>
+            </div>
+            <div class="ec-opt" onclick="goPage('premium')">
+              <div class="ec-left">
+                <div class="ec-ico">⭐</div>
+                <div><div class="ec-name">4K Export · No Watermark</div><div class="ec-desc">2160p · MP4 · Priority processing</div></div>
+              </div>
+              <div class="ec-right" style="color:var(--gold)">PRO →</div>
+            </div>
+            <div class="ec-opt" onclick="goPage('premium')">
+              <div class="ec-left">
+                <div class="ec-ico">📤</div>
+                <div><div class="ec-name">Share to Social</div><div class="ec-desc">Instagram, YouTube, WhatsApp direct</div></div>
+              </div>
+              <div class="ec-right" style="color:var(--gold)">PRO →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: PREMIUM ══ -->
+    <div class="pg" id="page-premium">
+      <div class="prp">
+        <div class="pr-hero">
+          <span class="pr-crown">👑</span>
+          <div class="pr-h2">Lifetime Premium</div>
+          <div class="pr-sub">Ek baar pay karo — Hamesha ke liye sab features unlock</div>
+        </div>
+        <div class="lt-card">
+          <div class="lt-ribbon">🔥 BEST DEAL</div>
+          <div class="lt-name">CaptioneX Pro</div>
+          <div class="lt-price">₹299</div>
+          <div class="lt-price-note">Pehle: ₹999/year</div>
+          <div class="lt-badge">✅ Lifetime Access — Koi Subscription Nahi!</div>
+          <div class="lt-feats">
+            <div class="lt-f"><span class="lt-f-ic">✓</span>No Ads kabhi nahi</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>300+ All Styles</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>AI Auto-Caption</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>4K Export</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>8 Languages</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>Priority Support</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>Custom Fonts</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>Future Updates Free</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>Trim & Edit Tools</div>
+            <div class="lt-f"><span class="lt-f-ic">✓</span>Social Share</div>
+          </div>
+          <button class="lt-btn" onclick="onBuyPremium()">🔥 Abhi ₹299 Mein Lo — Lifetime!</button>
+        </div>
+        <div class="pr-feats">
+          <div class="pr-ft">Premium Mein Kya Milta Hai</div>
+          <div class="pfi"><div class="pfic">🤖</div><div class="pfit"><h4>AI Auto-Captioning</h4><p>8 languages, real-time speech detection, automatic timing</p></div></div>
+          <div class="pfi"><div class="pfic">🎨</div><div class="pfit"><h4>All 300+ Styles Unlock</h4><p>Har premium style hamesha free mein access</p></div></div>
+          <div class="pfi"><div class="pfic">📤</div><div class="pfit"><h4>4K No-Watermark Export</h4><p>Highest quality, bilkul clean output, sabse fast</p></div></div>
+          <div class="pfi"><div class="pfic">🚫</div><div class="pfit"><h4>Ad-Free Experience</h4><p>Koi bhi ad kabhi nahi dikhega</p></div></div>
+          <div class="pfi"><div class="pfic">✂️</div><div class="pfit"><h4>Video Trim & Edit</h4><p>Professional editing tools directly in app</p></div></div>
+          <div class="pfi"><div class="pfic">🔄</div><div class="pfit"><h4>All Future Updates Free</h4><p>Aane wale sare naye features bhi free milenge</p></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PAGE: SETTINGS ══ -->
+    <div class="pg" id="page-settings">
+      <div class="setp">
+
+        <div class="set-sec">
+          <div class="set-head">🎨 App Theme</div>
+          <div class="tgrid" id="tgrid">
+            <div class="tdot-wrap"><div class="tdot on" style="background:linear-gradient(135deg,#101018,#6d28d9)" title="Dark" onclick="setTheme('',this)"></div><div class="tdot-lbl">Dark</div></div>
+            <div class="tdot-wrap"><div class="tdot" style="background:linear-gradient(135deg,#f0f0f8,#6d28d9)" title="Light" onclick="setTheme('light',this)"></div><div class="tdot-lbl">Light</div></div>
+            <div class="tdot-wrap"><div class="tdot" style="background:#000;border:1px solid #222" title="AMOLED" onclick="setTheme('amoled',this)"></div><div class="tdot-lbl">AMOLED</div></div>
+            <div class="tdot-wrap"><div class="tdot" style="background:linear-gradient(135deg,#010e1c,#0369a1)" title="Ocean" onclick="setTheme('ocean',this)"></div><div class="tdot-lbl">Ocean</div></div>
+            <div class="tdot-wrap"><div class="tdot" style="background:linear-gradient(135deg,#0f0208,#9d174d)" title="Rose" onclick="setTheme('rose',this)"></div><div class="tdot-lbl">Rose</div></div>
+            <div class="tdot-wrap"><div class="tdot" style="background:linear-gradient(135deg,#010d04,#15803d)" title="Forest" onclick="setTheme('forest',this)"></div><div class="tdot-lbl">Forest</div></div>
+          </div>
+        </div>
+
+        <div class="set-sec">
+          <div class="set-head">🔔 Notifications</div>
+          <div class="ni"><div class="ni-ic">📢</div><div class="ni-tx">App Notifications</div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="ni"><div class="ni-ic">💾</div><div class="ni-tx">Export Complete Alert</div><label class="tog"><input type="checkbox" checked><span class="tog-sl"></span></label></div>
+          <div class="ni"><div class="ni-ic">🆕</div><div class="ni-tx">New Styles Available</div><label class="tog"><input type="checkbox"><span class="tog-sl"></span></label></div>
+          <div class="ni"><div class="ni-ic">👑</div><div class="ni-tx">Premium Offers</div><label class="tog"><input type="checkbox"><span class="tog-sl"></span></label></div>
+        </div>
+
+        <div class="set-sec">
+          <div class="set-head">✏️ Caption Defaults</div>
+          <div class="set-range">
+            <span class="set-rlbl">Default Size</span>
+            <input type="range" min="12" max="56" value="20" oninput="this.nextElementSibling.textContent=this.value">
+            <span class="sl-val">20</span>
+          </div>
+          <div class="set-range">
+            <span class="set-rlbl">Duration (sec)</span>
+            <input type="range" min="1" max="10" value="3" oninput="S.defDur=+this.value;this.nextElementSibling.textContent=this.value+'s'">
+            <span class="sl-val">3s</span>
+          </div>
+          <div class="ni"><div class="ni-ic">📝</div><div class="ni-tx">Auto-Capitalize</div><label class="tog"><input type="checkbox" id="autocap" checked><span class="tog-sl"></span></label></div>
+          <div class="ni"><div class="ni-ic">🔁</div><div class="ni-tx">Loop Video</div><label class="tog"><input type="checkbox" onchange="document.getElementById('vid').loop=this.checked"><span class="tog-sl"></span></label></div>
+        </div>
+
+        <div class="set-sec">
+          <div class="set-head">📱 Device & Screen</div>
+          <div class="ni"><div class="ni-ic">🔆</div><div class="ni-tx">Keep Screen On</div><label class="tog"><input type="checkbox" onchange="onWake(this)"><span class="tog-sl"></span></label></div>
+          <div class="si" onclick="toast('4K Export: Premium lo! 👑','📤')">
+            <div class="si-ic">📤</div>
+            <div class="si-tx"><div class="si-ti">Export Quality</div><div class="si-su">HD 720p (Free) · 4K Pro only</div></div>
+            <div class="si-ar">›</div>
+          </div>
+        </div>
+
+        <div class="set-sec">
+          <div class="set-head">ℹ️ App Info</div>
+          <div class="si" onclick="toast('CaptioneX Pro v1.0 — Production Ready','✨')">
+            <div class="si-ic">📱</div><div class="si-tx"><div class="si-ti">Version</div><div class="si-su">v1.0.0 — Latest · Production Grade</div></div>
+          </div>
+          <div class="si" onclick="onShare()">
+            <div class="si-ic">📤</div><div class="si-tx"><div class="si-ti">App Share Karo</div><div class="si-su">Doston ko refer karo</div></div><div class="si-ar">›</div>
+          </div>
+          <div class="si" onclick="toast('support@captionex.app','📧')">
+            <div class="si-ic">📧</div><div class="si-tx"><div class="si-ti">Support</div><div class="si-su">support@captionex.app</div></div><div class="si-ar">›</div>
+          </div>
+          <div class="si" onclick="toast('Rating dialog...','⭐')">
+            <div class="si-ic">⭐</div><div class="si-tx"><div class="si-ti">Rate CaptioneX</div><div class="si-su">5 stars do — app improve hogi!</div></div><div class="si-ar">›</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ PAGE: PROFILE ══ -->
+    <div class="pg" id="page-profile">
+      <div class="pfp">
+        <div class="pf-card">
+          <div class="pf-av" onclick="toast('Avatar change coming soon!','📸')">
+            👤<div class="pf-ae">✏️</div>
+          </div>
+          <div class="pf-nm" id="pfnm" onclick="editName()">CaptioneX User</div>
+          <div class="pf-pl">Free Plan · <span onclick="goPage('premium')">Premium lo 👑</span></div>
+        </div>
+        <div class="stat-row">
+          <div class="sbox"><div class="sn" id="stv">0</div><div class="sl">Videos</div></div>
+          <div class="sbox"><div class="sn" id="stc">0</div><div class="sl">Captions</div></div>
+          <div class="sbox"><div class="sn">300+</div><div class="sl">Styles</div></div>
+        </div>
+        <div class="mlist">
+          <div class="mi" onclick="goPage('settings')"><div class="mi-ic">⚙️</div><div class="mi-tx"><div class="mi-ti">Settings</div><div class="mi-su">Theme, notifications, defaults</div></div><div class="mi-ar">›</div></div>
+          <div class="mi" onclick="goPage('premium')"><div class="mi-ic">👑</div><div class="mi-tx"><div class="mi-ti">Go Premium — ₹299 Lifetime</div><div class="mi-su">Sab features hamesha unlock karo</div></div><div class="mi-ar" style="color:var(--gold)">›</div></div>
+          <div class="mi" onclick="onShare()"><div class="mi-ic">📤</div><div class="mi-tx"><div class="mi-ti">App Share Karo</div><div class="mi-su">Friend ko refer karo</div></div><div class="mi-ar">›</div></div>
+          <div class="mi" onclick="goPage('styles')"><div class="mi-ic">🎨</div><div class="mi-tx"><div class="mi-ti">All Styles Browse Karo</div><div class="mi-su">300+ caption styles explore karo</div></div><div class="mi-ar">›</div></div>
+          <div class="mi" onclick="clearAllData()"><div class="mi-ic">🗑️</div><div class="mi-tx"><div class="mi-ti" style="color:var(--red)">Sab Data Reset Karo</div><div class="mi-su">Captions & settings delete ho jayenge</div></div><div class="mi-ar">›</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- AD BANNER (Free users) -->
+  <div class="ad" id="adbanner">
+    <div class="ad-tag">AD</div>
+    <div class="ad-txt">🔥 ₹299 mein Lifetime Premium — Ads hamesha ke liye band!</div>
+    <div class="ad-cta" onclick="goPage('premium')">Upgrade →</div>
+    <div class="ad-x" onclick="this.parentElement.style.display='none'">✕</div>
+  </div>
+
+  <!-- BOTTOM NAV — 5 BARS -->
+  <div class="bnav">
+    <button class="nbt on" id="nb-editor" onclick="goPage('editor')">
+      <div class="nb-ic">✂️</div><div class="nb-lb">Editor</div>
+    </button>
+    <button class="nbt" id="nb-styles" onclick="goPage('styles')">
+      <div class="nb-ic">🎨</div><div class="nb-lb">Styles</div>
+    </button>
+    <button class="nbt center" id="nb-create" onclick="goPage('create')">
+      <div class="nb-ic">➕</div><div class="nb-lb">Create</div>
+    </button>
+    <button class="nbt" id="nb-ai" onclick="goPage('ai')">
+      <div class="nb-ic">🤖</div><div class="nb-lb">AI</div>
+    </button>
+    <button class="nbt" id="nb-profile" onclick="goPage('profile')">
+      <div class="nb-ic">👤</div><div class="nb-lb">Profile</div>
+    </button>
+  </div>
+
+</div><!-- /app -->
+<script>
+(function(){"use strict";
+
+/* ── DOM REFS ── */
+var $ = function(id){return document.getElementById(id);};
+var D = {};
+["splash","app","vid","vzph","vzone","vctrl","tl","tlfil","tlbuf","tldot","tlbl",
+ "playbtn","mutebtn","capov","capdsp","fin","cap-in","micbtn","aibtn","langchips",
+ "rsize","vsize","rpos","rop","tcols","bgcols","qstyles","styleslist","srch","cattabs",
+ "wf","ailbl","aipg","tbx","caplist","capempty","stv","stc","rov","rovpct","rovbf","rovmsg",
+ "mlo","mbd","toast","tic","tmsg","pfnm","onb","autocap","speedbtn"
+].forEach(function(id){D[id]=$(""+id);});
+
+/* ── STATE ── */
+var S = {
+  caps:[], sty:null, lang:"hi-IN",
+  micOn:false, aiOn:false, recog:null,
+  selTxt:"#ffffff", selBg:"rgba(0,0,0,.82)",
+  muted:false, rCancel:false, defDur:3,
+  vidCnt:0, capCnt:0, toastTmr:null,
+  rAnim:null, wl:null, vidLoaded:false,
+  lastT:-1, styInited:false, onbStep:0,
+  playSpeed:1, speeds:[0.5,0.75,1,1.25,1.5,2]
+};
+
+/* ── 300+ STYLES DB ── */
+function buildStyles(){
+  var base = [
+    {id:1,n:"Classic White",c:"Basic",tx:"#fff",bg:"rgba(0,0,0,.82)",fw:"600",ff:"DM Sans",bd:"none",sh:"0 2px 12px rgba(0,0,0,.9)",r:"7px"},
+    {id:2,n:"Pure Black",c:"Basic",tx:"#000",bg:"rgba(255,255,255,.93)",fw:"600",ff:"DM Sans",bd:"none",sh:"none",r:"7px"},
+    {id:3,n:"No Background",c:"Basic",tx:"#fff",bg:"transparent",fw:"700",ff:"DM Sans",bd:"none",sh:"0 0 16px #000,0 0 32px rgba(0,0,0,.5)",r:"0"},
+    {id:4,n:"Gold Classic",c:"Basic",tx:"#FFD700",bg:"rgba(0,0,0,.85)",fw:"700",ff:"DM Sans",bd:"none",sh:"0 0 12px rgba(255,215,0,.3)",r:"7px"},
+    {id:5,n:"Soft White",c:"Basic",tx:"#fff",bg:"rgba(0,0,0,.52)",fw:"400",ff:"DM Sans",bd:"none",sh:"none",r:"5px"},
+    {id:6,n:"Bold Black",c:"Basic",tx:"#fff",bg:"#000",fw:"900",ff:"Syne",bd:"none",sh:"none",r:"4px"},
+    {id:7,n:"Cream",c:"Basic",tx:"#fffbf0",bg:"rgba(0,0,0,.78)",fw:"500",ff:"DM Sans",bd:"none",sh:"none",r:"6px"},
+    {id:8,n:"Silver",c:"Basic",tx:"#e8e8f0",bg:"rgba(0,0,0,.75)",fw:"600",ff:"DM Sans",bd:"none",sh:"none",r:"6px"},
+    {id:9,n:"Neon Purple",c:"Neon",tx:"#d946ef",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #d946ef",sh:"0 0 20px #d946ef,0 0 40px rgba(217,70,239,.2)",r:"9px"},
+    {id:10,n:"Neon Cyan",c:"Neon",tx:"#06b6d4",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #06b6d4",sh:"0 0 20px #06b6d4",r:"9px"},
+    {id:11,n:"Neon Pink",c:"Neon",tx:"#ec4899",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #ec4899",sh:"0 0 20px #ec4899",r:"9px"},
+    {id:12,n:"Neon Green",c:"Neon",tx:"#22c55e",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #22c55e",sh:"0 0 20px #22c55e",r:"9px"},
+    {id:13,n:"Neon Orange",c:"Neon",tx:"#f97316",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #f97316",sh:"0 0 22px #f97316",r:"9px"},
+    {id:14,n:"Neon Blue",c:"Neon",tx:"#3b82f6",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #3b82f6",sh:"0 0 20px #3b82f6",r:"9px"},
+    {id:15,n:"Neon Yellow",c:"Neon",tx:"#eab308",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #eab308",sh:"0 0 20px #eab308",r:"9px"},
+    {id:16,n:"Neon Red",c:"Neon",tx:"#ef4444",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #ef4444",sh:"0 0 20px #ef4444",r:"9px"},
+    {id:17,n:"Neon Teal",c:"Neon",tx:"#14b8a6",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #14b8a6",sh:"0 0 20px #14b8a6",r:"9px"},
+    {id:18,n:"Neon White",c:"Neon",tx:"#f0f0ff",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid rgba(255,255,255,.7)",sh:"0 0 24px rgba(255,255,255,.6)",r:"9px"},
+    {id:19,n:"Neon Rose",c:"Neon",tx:"#fb7185",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #fb7185",sh:"0 0 20px #fb7185",r:"9px"},
+    {id:20,n:"Neon Violet",c:"Neon",tx:"#a78bfa",bg:"rgba(0,0,0,.88)",fw:"800",ff:"Syne",bd:"1px solid #a78bfa",sh:"0 0 20px #a78bfa",r:"9px"},
+    {id:21,n:"Sunset",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#f97316,#ec4899,#a855f7)",sh:"none",r:"9px"},
+    {id:22,n:"Ocean",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#06b6d4,#3b82f6,#6366f1)",sh:"none",r:"9px"},
+    {id:23,n:"Aurora",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#8b5cf6,#ec4899,#f59e0b)",sh:"none",r:"9px"},
+    {id:24,n:"Lava",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#dc2626,#f97316,#fbbf24)",sh:"none",r:"9px"},
+    {id:25,n:"Rose Gold",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#f43f5e,#fb923c,#fbbf24)",sh:"none",r:"9px"},
+    {id:26,n:"Galaxy",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#c026d3,#7c3aed,#1d4ed8)",sh:"none",r:"9px"},
+    {id:27,n:"Tricolor",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"900",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#ff9933,#fff,#138808)",sh:"none",r:"7px"},
+    {id:28,n:"Mint",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#d1fae5,#34d399,#059669)",sh:"none",r:"9px"},
+    {id:29,n:"Forest",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#22c55e,#15803d)",sh:"none",r:"9px"},
+    {id:30,n:"Candy",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#f0abfc,#c084fc,#818cf8)",sh:"none",r:"9px"},
+    {id:31,n:"Peach",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"DM Sans",bd:"none",g:"linear-gradient(90deg,#fed7aa,#fb923c,#ea580c)",sh:"none",r:"9px"},
+    {id:32,n:"Sky",c:"Gradient",tx:"transparent",bg:"rgba(0,0,0,.78)",fw:"800",ff:"Syne",bd:"none",g:"linear-gradient(90deg,#7dd3fc,#38bdf8,#0ea5e9)",sh:"none",r:"9px"},
+    {id:33,n:"VHS Green",c:"Retro",tx:"#b0ff80",bg:"rgba(0,20,0,.92)",fw:"700",ff:"JetBrains Mono",bd:"none",sh:"2px 0 rgba(255,0,0,.6)",r:"2px"},
+    {id:34,n:"Typewriter",c:"Retro",tx:"#f5deb3",bg:"rgba(40,28,8,.94)",fw:"700",ff:"JetBrains Mono",bd:"none",sh:"none",r:"3px"},
+    {id:35,n:"Arcade",c:"Retro",tx:"#ffff00",bg:"rgba(0,0,80,.94)",fw:"700",ff:"JetBrains Mono",bd:"2px solid #ff0",sh:"none",r:"0"},
+    {id:36,n:"Miami 80s",c:"Retro",tx:"#ff6ec7",bg:"rgba(0,0,0,.9)",fw:"800",ff:"DM Sans",bd:"1px solid #ff6ec7",sh:"0 0 14px #ff6ec7,0 0 28px #4040ff",r:"0"},
+    {id:37,n:"Pixel",c:"Retro",tx:"#00ff00",bg:"#000",fw:"400",ff:"JetBrains Mono",bd:"none",sh:"none",r:"0"},
+    {id:38,n:"Cassette",c:"Retro",tx:"#ffa500",bg:"rgba(20,10,0,.95)",fw:"700",ff:"JetBrains Mono",bd:"1px solid #ffa500",sh:"none",r:"2px"},
+    {id:39,n:"CRT Blue",c:"Retro",tx:"#00ccff",bg:"rgba(0,0,20,.95)",fw:"400",ff:"JetBrains Mono",bd:"none",sh:"0 0 8px #00ccff",r:"0"},
+    {id:40,n:"Film",c:"Cinema",tx:"#fff",bg:"#000",fw:"400",ff:"DM Sans",bd:"none",sh:"none",r:"0"},
+    {id:41,n:"Oscars",c:"Cinema",tx:"#FFD700",bg:"rgba(0,0,0,.93)",fw:"700",ff:"DM Sans",bd:"none",sh:"0 2px 8px #000",r:"5px"},
+    {id:42,n:"Noir",c:"Cinema",tx:"#c8c8c8",bg:"rgba(0,0,0,.94)",fw:"400",ff:"DM Sans",bd:"none",sh:"2px 2px 5px #000",r:"0"},
+    {id:43,n:"Blockbuster",c:"Cinema",tx:"#ffe600",bg:"#0000bb",fw:"900",ff:"Syne",bd:"none",sh:"none",r:"0"},
+    {id:44,n:"Letterbox",c:"Cinema",tx:"#fffde7",bg:"rgba(0,0,0,.94)",fw:"300",ff:"DM Sans",bd:"none",sh:"none",r:"0"},
+    {id:45,n:"Hollywood",c:"Cinema",tx:"#fff",bg:"rgba(0,0,0,.88)",fw:"700",ff:"DM Sans",bd:"none",sh:"0 1px 0 #000,0 -1px 0 #000,1px 0 0 #000,-1px 0 0 #000",r:"0"},
+    {id:46,n:"TikTok",c:"Social",tx:"#fff",bg:"rgba(0,0,0,.9)",fw:"800",ff:"DM Sans",bd:"none",sh:"2px 0 #fe2c55,-2px 0 #25f4ee",r:"7px"},
+    {id:47,n:"YouTube",c:"Social",tx:"#fff",bg:"#ff0000",fw:"800",ff:"DM Sans",bd:"none",sh:"none",r:"4px"},
+    {id:48,n:"Twitter",c:"Social",tx:"#fff",bg:"#1da1f2",fw:"700",ff:"DM Sans",bd:"none",sh:"none",r:"22px"},
+    {id:49,n:"Snapchat",c:"Social",tx:"#000",bg:"#fffc00",fw:"800",ff:"DM Sans",bd:"none",sh:"none",r:"13px"},
+    {id:50,n:"WhatsApp",c:"Social",tx:"#fff",bg:"#25d366",fw:"600",ff:"DM Sans",bd:"none",sh:"none",r:"11px"},
+    {id:51,n:"Instagram",c:"Social",tx:"transparent",bg:"rgba(0,0,0,.85)",fw:"700",ff:"DM Sans",bd:"none",g:"linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)",sh:"none",r:"9px"},
+    {id:52,n:"Filmy Gold",c:"Bollywood",tx:"#FFD700",bg:"rgba(100,0,0,.92)",fw:"800",ff:"Syne",bd:"2px solid #FFD700",sh:"0 0 22px rgba(255,215,0,.6)",r:"5px"},
+    {id:53,n:"Dhamaka",c:"Bollywood",tx:"#ff9933",bg:"rgba(0,0,0,.88)",fw:"900",ff:"Syne",bd:"none",sh:"0 0 18px #ff9933",r:"9px"},
+    {id:54,n:"Filmy Red",c:"Bollywood",tx:"#fff",bg:"rgba(180,0,0,.88)",fw:"800",ff:"Syne",bd:"none",sh:"2px 2px 0 #000",r:"5px"},
+    {id:55,n:"Masala",c:"Bollywood",tx:"#ff9933",bg:"rgba(0,0,0,.84)",fw:"900",ff:"Syne",bd:"1px solid #ff9933",sh:"0 0 24px rgba(255,153,51,.5)",r:"7px"},
+    {id:56,n:"Sholay",c:"Bollywood",tx:"#ffd700",bg:"rgba(60,20,0,.92)",fw:"900",ff:"Syne",bd:"2px solid #ffd700",sh:"0 0 16px rgba(255,200,0,.4)",r:"4px"},
+    {id:57,n:"Glitch RGB",c:"Glitch",tx:"#fff",bg:"rgba(0,0,0,.92)",fw:"800",ff:"Syne",bd:"none",sh:"3px 0 #ff0040,-3px 0 #00ffee,0 0 12px rgba(255,0,64,.2)",r:"5px"},
+    {id:58,n:"Glitch Purple",c:"Glitch",tx:"#fff",bg:"rgba(0,0,0,.92)",fw:"800",ff:"Syne",bd:"none",sh:"3px 0 #d946ef,-3px 0 #eab308",r:"5px"},
+    {id:59,n:"Glitch Blue",c:"Glitch",tx:"#fff",bg:"rgba(0,0,0,.92)",fw:"800",ff:"Syne",bd:"none",sh:"4px 0 #06b6d4,-4px 0 #ec4899",r:"5px"},
+    {id:60,n:"Ghost",c:"Minimal",tx:"rgba(255,255,255,.88)",bg:"transparent",fw:"300",ff:"DM Sans",bd:"none",sh:"0 1px 5px rgba(0,0,0,.95)",r:"0"},
+    {id:61,n:"Underline",c:"Minimal",tx:"#fff",bg:"transparent",fw:"600",ff:"DM Sans",bd:"none",sh:"0 4px 0 #8b5cf6",r:"0"},
+    {id:62,n:"Mono",c:"Minimal",tx:"#d4d4e4",bg:"rgba(0,0,0,.58)",fw:"400",ff:"JetBrains Mono",bd:"none",sh:"none",r:"0"},
+    {id:63,n:"Outline Only",c:"Minimal",tx:"#fff",bg:"transparent",fw:"700",ff:"Syne",bd:"1px solid rgba(255,255,255,.5)",sh:"none",r:"7px"},
+  ];
+  var cats=["Pastel","Dark Glass","3D Pop","Luxury","Sport","Futuristic","Editorial","Vintage","Glow","Holographic","Crystal","Metallic","Cinematic","Street","Urban","Kawaii","Gothic","Cyberpunk","Elegant","Bold"];
+  var pcolors=["#f472b6","#fb7185","#fbbf24","#86efac","#67e8f9","#c4b5fd","#fda4af","#fed7aa","#a5f3fc","#bef264","#f9a8d4","#d8b4fe","#7dd3fc","#4ade80","#facc15","#e879f9","#f87171","#34d399","#818cf8","#fb923c"];
+  var pfw=["800","700","900","600","800","700"];
+  var pff=["Syne","DM Sans","Syne","DM Sans","JetBrains Mono","Syne"];
+  var prads=["0","4px","8px","12px","20px","50px","3px","6px"];
+  var pshs=["0 4px 16px rgba(0,0,0,.6)","0 0 22px currentColor","2px 4px 0 rgba(0,0,0,.85)","0 8px 32px rgba(0,0,0,.7)","none","0 0 30px currentColor"];
+  for(var i=64;i<=330;i++){
+    var ci=(i-64)%pcolors.length;
+    var cati=Math.floor((i-64)/18)%cats.length;
+    var bgOpts=["transparent","rgba(0,0,0,.82)","rgba(0,0,0,.65)","rgba(0,0,0,.92)","rgba(10,0,20,.88)","rgba(0,10,0,.88)"];
+    base.push({
+      id:i,n:"Style "+i,c:cats[cati],pro:true,
+      tx:pcolors[ci],
+      bg:bgOpts[i%bgOpts.length],
+      fw:pfw[i%pfw.length],
+      ff:pff[i%pff.length],
+      bd:(i%4===0)?("1px solid "+pcolors[ci]):"none",
+      sh:pshs[i%pshs.length],
+      r:prads[i%prads.length]
+    });
+  }
+  return base;
+}
+
+var STYLES = buildStyles();
+S.sty = STYLES[0];
+
+/* ── APPLY STYLE TO ELEMENT ── */
+function applyEl(el, s){
+  el.style.fontFamily = s.ff + ",sans-serif";
+  el.style.fontWeight = s.fw;
+  el.style.borderRadius = s.r;
+  el.style.border = s.bd || "none";
+  el.style.boxShadow = s.sh || "none";
+  el.style.padding = "6px 14px";
+  if(s.g){
+    el.style.backgroundImage = s.g;
+    el.style.webkitBackgroundClip = "text";
+    el.style.webkitTextFillColor = "transparent";
+    el.style.backgroundClip = "text";
+    el.style.background = s.bg || "transparent";
+  } else {
+    el.style.backgroundImage = "";
+    el.style.webkitBackgroundClip = "";
+    el.style.webkitTextFillColor = "";
+    el.style.color = s.tx || "#fff";
+    el.style.background = s.bg || "rgba(0,0,0,.82)";
+  }
+}
+
+function applyStyle(){
+  var cd = D["capdsp"], s = S.sty;
+  applyEl(cd, s);
+  cd.style.fontSize = D["rsize"].value + "px";
+  cd.style.opacity = D["rop"].value / 100;
+  if(!s.g){ cd.style.color = S.selTxt; cd.style.background = S.selBg; }
+}
+
+function setSty(id){
+  var s = null;
+  for(var i=0;i<STYLES.length;i++){ if(STYLES[i].id===id){s=STYLES[i];break;} }
+  if(!s) return;
+  S.sty = s;
+  document.querySelectorAll("[data-sid]").forEach(function(el){
+    el.classList.toggle("on", +el.dataset.sid === id);
+  });
+  applyStyle();
+}
+
+/* ── COLORS ── */
+var TC = ["#fff","#000","#FFD700","#f43f5e","#06b6d4","#22c55e","#f97316","#a78bfa","#3b82f6","#f9a8d4","#fbbf24","#ec4899"];
+var BC = ["rgba(0,0,0,.82)","rgba(255,255,255,.93)","rgba(109,40,217,.88)","rgba(236,72,153,.88)","transparent","rgba(6,182,212,.88)","rgba(34,197,94,.88)","rgba(245,158,11,.88)","rgba(239,68,68,.88)","rgba(10,0,25,.96)","rgba(0,0,0,.5)","rgba(20,20,30,.95)"];
+
+function initColors(){
+  function mkDot(c, active, con, isText){
+    var d = document.createElement("div");
+    d.className = "cdot" + (active ? " on" : "");
+    d.style.background = c === "transparent" ? "repeating-conic-gradient(#555 0 25%,#333 0 50%) 0/14px 14px" : c;
+    d.onclick = function(){
+      if(isText) S.selTxt = c; else S.selBg = c;
+      applyStyle();
+      con.querySelectorAll(".cdot").forEach(function(x){x.classList.remove("on");});
+      d.classList.add("on");
+    };
+    return d;
+  }
+  var tf = document.createDocumentFragment(), bf = document.createDocumentFragment();
+  TC.forEach(function(c,i){ tf.appendChild(mkDot(c, i===0, D["tcols"], true)); });
+  BC.forEach(function(c,i){ bf.appendChild(mkDot(c, i===0, D["bgcols"], false)); });
+  D["tcols"].appendChild(tf);
+  D["bgcols"].appendChild(bf);
+}
+
+/* ── QUICK STYLES (Editor) ── */
+function initQuick(){
+  var f = document.createDocumentFragment();
+  STYLES.slice(0,15).forEach(function(s){
+    var el = document.createElement("div");
+    el.className = "scard" + (s.id===1?" on":"");
+    el.dataset.sid = s.id;
+    var p = document.createElement("div"); p.className = "sprv"; applyEl(p,s); p.textContent = "Caption";
+    var n = document.createElement("div"); n.className = "snm"; n.textContent = s.n;
+    el.appendChild(p); el.appendChild(n);
+    el.onclick = (function(sid,sn){ return function(){ setSty(sid); toast(sn,"🎨"); }; })(s.id, s.n);
+    f.appendChild(el);
+  });
+  D["qstyles"].innerHTML = "";
+  D["qstyles"].appendChild(f);
+}
+
+/* ── STYLES PAGE ── */
+var CATS_ORDER = ["Basic","Neon","Gradient","Retro","Cinema","Social","Bollywood","Glitch","Minimal","Pastel","Dark Glass","3D Pop","Luxury","Sport","Futuristic","Editorial","Vintage","Glow","Holographic","Crystal","Metallic","Cinematic","Street","Urban","Kawaii","Gothic","Cyberpunk","Elegant","Bold"];
+var curCat = "All";
+var srchTmr = null;
+var styInited = false;
+
+function initCatTabs(){
+  var f = document.createDocumentFragment();
+  var all = document.createElement("span"); all.className = "ctab on"; all.textContent = "✨ All";
+  all.onclick = function(){ curCat="All"; renderStyles(null); document.querySelectorAll(".ctab").forEach(function(c){c.classList.remove("on");}); all.classList.add("on"); };
+  f.appendChild(all);
+  var seen = {};
+  STYLES.forEach(function(s){ if(!seen[s.c]){ seen[s.c]=true; } });
+  CATS_ORDER.forEach(function(cat){
+    if(!seen[cat]) return;
+    var t = document.createElement("span"); t.className = "ctab"; t.textContent = cat;
+    t.onclick = (function(c, el){ return function(){
+      curCat = c; renderStyles(null);
+      document.querySelectorAll(".ctab").forEach(function(x){x.classList.remove("on");});
+      el.classList.add("on");
+    }; })(cat, t);
+    f.appendChild(t);
+  });
+  D["cattabs"].innerHTML = ""; D["cattabs"].appendChild(f);
+}
+
+function renderStyles(filter){
+  var con = D["styleslist"];
+  var data = filter || (curCat === "All" ? STYLES : STYLES.filter(function(s){ return s.c === curCat; }));
+  var cats = {};
+  data.forEach(function(s){ if(!cats[s.c]) cats[s.c]=[]; cats[s.c].push(s); });
+  var frag = document.createDocumentFragment();
+  CATS_ORDER.forEach(function(cat){
+    if(!cats[cat]) return;
+    var lbl = document.createElement("div"); lbl.className = "cat-head"; lbl.textContent = cat + " (" + cats[cat].length + ")";
+    frag.appendChild(lbl);
+    var g = document.createElement("div"); g.className = "sg2";
+    cats[cat].forEach(function(s){
+      var el = document.createElement("div");
+      el.className = "slg" + (s.id===S.sty.id?" on":"");
+      el.dataset.sid = s.id;
+      var glow = document.createElement("div"); glow.className = "slg-glow";
+      if(s.pro){ var b = document.createElement("div"); b.className = "prob"; b.textContent = "PRO"; el.appendChild(b); }
+      var p = document.createElement("div"); p.className = "slg-prv"; applyEl(p,s); p.textContent = "Caption AI";
+      var n = document.createElement("div"); n.className = "slg-nm"; n.textContent = s.n;
+      el.appendChild(glow); el.appendChild(p); el.appendChild(n);
+      el.onclick = (function(sid,sn,pro){ return function(){
+        if(pro){ toast("PRO style! Rs.299 mein unlock karo","👑"); goPage("premium"); return; }
+        setSty(sid); toast(sn,"🎨"); goPage("editor");
+      }; })(s.id, s.n, s.pro);
+      g.appendChild(el);
+    });
+    frag.appendChild(g);
+  });
+  con.innerHTML = ""; con.appendChild(frag);
+}
+
+function onSrch(q){
+  clearTimeout(srchTmr);
+  srchTmr = setTimeout(function(){
+    var lq = q.toLowerCase();
+    if(!q){ renderStyles(null); return; }
+    renderStyles(STYLES.filter(function(s){ return s.n.toLowerCase().indexOf(lq)>-1 || s.c.toLowerCase().indexOf(lq)>-1; }));
+  }, 160);
+}
+
+/* ── VIDEO RAF LOOP ── */
+function vidLoop(){
+  if(S.vidLoaded){
+    var v = D["vid"], t = v.currentTime;
+    if(Math.abs(t - S.lastT) > 0.04){
+      S.lastT = t;
+      var dur = v.duration || 1;
+      var pct = (t/dur) * 100;
+      D["tlfil"].style.width = pct + "%";
+      D["tldot"].style.left = pct + "%";
+      D["tlbl"].textContent = fmt(t) + "/" + fmt(dur);
+      if(!S.micOn && !S.aiOn) syncCap(t);
+    }
+  }
+  requestAnimationFrame(vidLoop);
+}
+
+/* ── VIDEO ── */
+function vzClick(){ if(!S.vidLoaded) D["fin"].click(); }
+function onFile(inp){
+  if(!inp.files||!inp.files[0]) return;
+  var v = D["vid"];
+  if(v.src) URL.revokeObjectURL(v.src);
+  v.src = URL.createObjectURL(inp.files[0]);
+  v.style.display = "block";
+  D["vzph"].style.display = "none";
+  D["vctrl"].classList.add("on");
+  D["vzone"].onclick = null;
+  v.load();
+  S.vidLoaded = true; S.vidCnt++;
+  D["stv"].textContent = S.vidCnt;
+  toast("Video load ho gaya! Caption add karo","🎬");
+}
+function initVidEv(){
+  var v = D["vid"], tl = D["tl"];
+  v.addEventListener("ended", function(){ D["playbtn"].textContent="▶"; }, {passive:true});
+  v.addEventListener("waiting", function(){ D["tlbuf"].style.width="100%"; }, {passive:true});
+  v.addEventListener("canplay", function(){ D["tlbuf"].style.width="0"; }, {passive:true});
+  function doSeek(cx){
+    if(!v.duration) return;
+    var r = tl.getBoundingClientRect();
+    v.currentTime = Math.max(0, Math.min(v.duration, ((cx-r.left)/r.width)*v.duration));
+  }
+  tl.onclick = function(e){ doSeek(e.clientX); };
+  tl.addEventListener("touchstart", function(e){ e.preventDefault(); doSeek(e.touches[0].clientX); }, {passive:false});
+  tl.addEventListener("touchmove",  function(e){ e.preventDefault(); doSeek(e.touches[0].clientX); }, {passive:false});
+}
+function onPlay(e){
+  e.stopPropagation();
+  var v = D["vid"];
+  if(v.paused){ v.play(); D["playbtn"].textContent="⏸"; }
+  else { v.pause(); D["playbtn"].textContent="▶"; }
+}
+function onRestart(){
+  if(!S.vidLoaded){ toast("Pehle video import karo","⚠️"); return; }
+  D["vid"].currentTime=0; D["vid"].play(); D["playbtn"].textContent="⏸";
+  toast("Restart!","⟳");
+}
+function onSkip(s){
+  if(!S.vidLoaded){ toast("Pehle video import karo","⚠️"); return; }
+  var v = D["vid"];
+  v.currentTime = Math.max(0, Math.min(v.duration||0, v.currentTime+s));
+  toast((s>0?"+":"")+s+"s", s>0?"⏩":"⏪");
+}
+function onMute(){
+  S.muted = !S.muted; D["vid"].muted = S.muted;
+  D["mutebtn"].textContent = S.muted ? "🔇" : "🔊";
+}
+function cycleSpeed(){
+  var idx = S.speeds.indexOf(S.playSpeed);
+  S.playSpeed = S.speeds[(idx+1)%S.speeds.length];
+  D["vid"].playbackRate = S.playSpeed;
+  D["speedbtn"].textContent = S.playSpeed + "x";
+  toast("Speed: " + S.playSpeed + "x","⚡");
+}
+function fmt(s){
+  s=s||0; var m=Math.floor(s/60), sec=Math.floor(s%60);
+  return m + ":" + (sec<10?"0":"") + sec;
+}
+
+/* ── CAPTIONS ── */
+function syncCap(t){
+  var act = null;
+  for(var i=0;i<S.caps.length;i++){ if(t>=S.caps[i].s&&t<=S.caps[i].e){act=S.caps[i];break;} }
+  var cd = D["capdsp"];
+  if(act){ if(cd.textContent!==act.tx){cd.textContent=act.tx; applyStyle();} }
+  else{ cd.textContent=""; }
+}
+function onAdd(txt){
+  var inp = D["cap-in"];
+  var t = (txt!==null ? txt : inp.value).trim();
+  var ac = D["autocap"];
+  if(ac && ac.checked && t) t = t[0].toUpperCase() + t.slice(1);
+  if(!t){ toast("Caption likhna zaroori hai","⚠️"); return; }
+  var v = D["vid"];
+  var ts = (S.vidLoaded && v.currentTime>0) ? v.currentTime : S.caps.length*S.defDur;
+  S.caps.push({id:Date.now(), tx:t, s:ts, e:ts+S.defDur});
+  if(txt===null) inp.value="";
+  renderCaps(); showCap(t);
+  S.capCnt++; D["stc"].textContent = S.capCnt;
+  toast("Caption added!","✅");
+}
+function renderCaps(){
+  var list=D["caplist"], emp=D["capempty"];
+  emp.style.display = S.caps.length ? "none" : "block";
+  var f = document.createDocumentFragment();
+  S.caps.forEach(function(c){
+    var el=document.createElement("div"); el.className="ci";
+    var te=document.createElement("div"); te.className="ci-t"; te.textContent=fmt(c.s);
+    var tx=document.createElement("div"); tx.className="ci-x"; tx.textContent=c.tx;
+    var d=document.createElement("button"); d.className="ci-del"; d.textContent="🗑";
+    d.onclick=(function(id){return function(){
+      S.caps=S.caps.filter(function(x){return x.id!==id;});
+      renderCaps(); toast("Deleted","🗑");
+    };})(c.id);
+    el.appendChild(te); el.appendChild(tx); el.appendChild(d);
+    f.appendChild(el);
+  });
+  list.innerHTML=""; list.appendChild(f);
+}
+function showCap(text){
+  var cd=D["capdsp"]; cd.textContent=text; applyStyle();
+  cd.style.transition="none"; cd.style.transform="scale(.86)";
+  requestAnimationFrame(function(){
+    cd.style.transition="transform .16s"; cd.style.transform="scale(1)";
+  });
+  setTimeout(function(){ if(cd.textContent===text) cd.textContent=""; }, 3500);
+}
+function clearCaps(){
+  if(!S.caps.length){ toast("Koi caption nahi","ℹ️"); return; }
+  openMod("🗑 Sab Delete Karo?",
+    "<div class='ibox'>" + S.caps.length + " captions delete honge. Yeh action undo nahi ho sakta.</div>" +
+    "<button class='bf' style='background:var(--red);color:#fff' onclick=\'S.caps=[];renderCaps();closeMod();toast(\'Sab delete ho gaya!\',\'🗑\');\'>Haan, Delete Karo</button>" +
+    "<button class='bf' style='background:var(--s2);color:var(--t2)' onclick='closeMod()'>Cancel</button>"
+  );
+}
+
+/* ── SLIDERS ── */
+var sRaf=null;
+function onSize(v){ D["vsize"].textContent=v; if(sRaf)cancelAnimationFrame(sRaf); sRaf=requestAnimationFrame(function(){D["capdsp"].style.fontSize=v+"px";}); }
+function onPos(v){ D["capov"].style.bottom=v+"%"; }
+function onOp(v){ D["capdsp"].style.opacity=v/100; }
+
+/* ── LANGUAGE ── */
+function onLang(el){
+  D["langchips"].querySelectorAll(".chip").forEach(function(c){c.classList.remove("on");});
+  el.classList.add("on"); S.lang = el.dataset.lang||"hi-IN";
+  if(S.recog) S.recog.lang = S.lang;
+  toast(el.textContent+" selected","🌐");
+}
+
+/* ── SPEECH ── */
+function initSpeech(){
+  var SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ console.log("Speech not supported"); return; }
+  S.recog = new SR();
+  S.recog.continuous = true; S.recog.interimResults = true; S.recog.lang = S.lang;
+  S.recog.onresult = function(e){
+    var int_="", fin_="";
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      var t=e.results[i][0].transcript;
+      if(e.results[i].isFinal) fin_+=t; else int_+=t;
+    }
+    if(int_){ D["capdsp"].textContent=int_; applyStyle(); }
+    if(fin_){ var c=fin_.trim(); if(c){ onAdd(c); appendTbx(c); } }
+  };
+  S.recog.onerror = function(e){ toast("Mic error: "+e.error,"⚠️"); stopAll(); };
+  S.recog.onend = function(){ if(S.aiOn||S.micOn){ try{S.recog.start();}catch(er){} } };
+}
+function startRecog(){
+  if(!S.recog){ toast("Chrome/Edge mein kaam karta hai","⚠️"); return false; }
+  S.recog.lang = S.lang;
+  try{ S.recog.start(); }catch(e){}
+  return true;
+}
+function stopAll(){
+  S.micOn=false; S.aiOn=false;
+  if(S.recog){ try{S.recog.stop();}catch(e){} }
+  D["micbtn"].classList.remove("on"); D["micbtn"].textContent="🎤";
+  D["aibtn"].classList.remove("on"); D["aibtn"].textContent="🤖 AI Auto-Detect — Bolte hi Caption Banega!";
+  D["wf"].classList.remove("on"); D["ailbl"].textContent="Ready hai · Shuru karne ke liye button dabao";
+  D["aipg"].textContent="🎙️  AI Detection Shuru Karo";
+}
+function onMic(){
+  if(S.micOn){
+    S.micOn=false; try{S.recog&&S.recog.stop();}catch(e){}
+    D["micbtn"].classList.remove("on"); D["micbtn"].textContent="🎤";
+  } else {
+    S.micOn=true; if(S.aiOn){S.aiOn=false;}
+    if(!startRecog()){S.micOn=false;return;}
+    D["micbtn"].classList.add("on"); D["micbtn"].textContent="⏹";
+    toast("Sun raha hoon! Bolo...","🎤");
+  }
+}
+function onAIDet(){
+  if(S.aiOn){stopAll();return;}
+  S.aiOn=true; if(S.micOn){S.micOn=false;}
+  if(!startRecog()){S.aiOn=false;return;}
+  D["aibtn"].classList.add("on"); D["aibtn"].textContent="⏹ Stop AI";
+  toast("AI detect kar raha hai! Bolo clearly","🤖");
+}
+function onAIPage(){
+  if(S.aiOn){
+    stopAll();
+  } else {
+    S.aiOn=true; if(S.micOn){S.micOn=false;}
+    if(!startRecog()){S.aiOn=false;return;}
+    D["wf"].classList.add("on");
+    D["ailbl"].textContent="🔴 Live sun raha hai...";
+    D["aipg"].textContent="⏹  Rokna? Tap karo";
+    toast("AI sun raha hai! Clearly bolo","🤖");
+  }
+}
+function appendTbx(t){
+  var b=D["tbx"]; b.classList.add("on"); b.classList.remove("tbx-empty");
+  b.textContent += "• " + t + "\n";
+  b.scrollTop = b.scrollHeight;
+}
+
+/* ── CANVAS EXPORT ── */
+function doExport(){
+  if(!S.vidLoaded){ toast("Pehle video import karo!","⚠️"); return; }
+  openMod("💾 Video Save Karo",
+    "<div class='ibox'>✅ Captions video mein burn honge<br>✅ Style, color, position preserve hoga<br>✅ Original quality maintain hogi<br><strong>📊 Captions: " + S.caps.length + "</strong></div>" +
+    "<button class='bf' style='background:linear-gradient(135deg,var(--acc),var(--pk));color:#fff' onclick='startRender();closeMod()'>🎬 Render &amp; Download</button>" +
+    "<button class='bf' style='background:linear-gradient(135deg,var(--gold),#f97316);color:#000' onclick=\'goPage(\'premium\');closeMod()\'>👑 4K Export — ₹299 Lifetime</button>" +
+    "<button class='bf' style='background:var(--s2);color:var(--t2)' onclick='closeMod()'>Cancel</button>"
+  );
+}
+function startRender(){
+  if(!S.vidLoaded) return;
+  S.rCancel=false;
+  var ov=D["rov"],pctEl=D["rovpct"],bfEl=D["rovbf"],msgEl=D["rovmsg"];
+  ov.classList.add("on");
+  var v=D["vid"];
+  function go(){
+    var W=v.videoWidth||1280, H=v.videoHeight||720;
+    var canvas=document.createElement("canvas"); canvas.width=W; canvas.height=H;
+    var ctx=canvas.getContext("2d",{alpha:false,desynchronized:true});
+    var mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")?"video/webm;codecs=vp9":"video/webm";
+    var chunks=[], stream=canvas.captureStream(30);
+    var rec=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:6000000});
+    rec.ondataavailable=function(e){if(e.data&&e.data.size>0)chunks.push(e.data);};
+    rec.onstop=function(){
+      ov.classList.remove("on");
+      if(S.rCancel){toast("Render cancel ho gaya","❌");return;}
+      var blob=new Blob(chunks,{type:mime});
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement("a"); a.href=url; a.download="CaptioneX_Video.webm"; a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);},10000);
+      toast("Video save ho gaya! Download ho raha hai","💾");
+    };
+    var dur=v.duration, ts0=null;
+    function draw(ts){
+      if(S.rCancel){rec.stop();return;}
+      if(!ts0) ts0=ts;
+      var el=(ts-ts0)/1000, pct=Math.min(100,Math.round((el/dur)*100));
+      pctEl.textContent=pct+"%"; bfEl.style.width=pct+"%";
+      msgEl.textContent="Rendering "+pct+"% — Video ban raha hai\nTab band mat karo!";
+      ctx.drawImage(v,0,0,W,H);
+      var t=v.currentTime, act=null;
+      for(var i=0;i<S.caps.length;i++){if(t>=S.caps[i].s&&t<=S.caps[i].e){act=S.caps[i];break;}}
+      if(act) drawCapCanvas(ctx,act.tx,W,H);
+      if(el<dur&&!v.ended) S.rAnim=requestAnimationFrame(draw);
+      else rec.stop();
+    }
+    rec.start(200); v.currentTime=0; v.muted=true; v.play();
+    S.rAnim=requestAnimationFrame(draw);
+  }
+  if(v.readyState>=1) go(); else v.addEventListener("loadedmetadata",go,{once:true});
+}
+function cancelRender(){ S.rCancel=true; if(S.rAnim)cancelAnimationFrame(S.rAnim); }
+function drawCapCanvas(ctx,text,W,H){
+  var sz=parseInt(D["rsize"].value,10)||20;
+  var pv=parseInt(D["rpos"].value,10)||22;
+  var posY=H-(pv/100)*H;
+  var op=parseInt(D["rop"].value,10)/100;
+  var s=S.sty;
+  ctx.save(); ctx.globalAlpha=op;
+  ctx.font=(s.fw||"600")+" "+sz+"px "+(s.ff||"DM Sans")+",sans-serif";
+  ctx.textAlign="center"; ctx.textBaseline="middle";
+  var mw=ctx.measureText(text).width;
+  var px=18,py=9,bw=mw+px*2,bh=sz+py*2,bx=W/2-bw/2,by=posY-bh/2;
+  var rad=Math.min(parseInt(s.r||"7",10)||7,bw/2,bh/2);
+  var bg=(S.selBg&&S.selBg!=="transparent")?S.selBg:(s.bg||"rgba(0,0,0,.82)");
+  if(bg&&bg!=="transparent"){
+    ctx.fillStyle=bg;
+    ctx.beginPath();
+    ctx.moveTo(bx+rad,by); ctx.lineTo(bx+bw-rad,by); ctx.arcTo(bx+bw,by,bx+bw,by+rad,rad);
+    ctx.lineTo(bx+bw,by+bh-rad); ctx.arcTo(bx+bw,by+bh,bx+bw-rad,by+bh,rad);
+    ctx.lineTo(bx+rad,by+bh); ctx.arcTo(bx,by+bh,bx,by+bh-rad,rad);
+    ctx.lineTo(bx,by+rad); ctx.arcTo(bx,by,bx+rad,by,rad);
+    ctx.closePath(); ctx.fill();
+  }
+  if(s.sh && s.sh!=="none"){ ctx.shadowColor=S.selTxt; ctx.shadowBlur=6; }
+  ctx.fillStyle=S.selTxt||s.tx||"#fff";
+  ctx.fillText(text,W/2,posY);
+  ctx.restore();
+}
+
+/* ── NAVIGATION ── */
+var PAGES = ["editor","styles","ai","create","premium","settings","profile"];
+function goPage(name){
+  PAGES.forEach(function(p){
+    var pg=document.getElementById("page-"+p);
+    var nb=document.getElementById("nb-"+p);
+    if(pg) pg.classList.toggle("on",p===name);
+    if(nb) nb.classList.toggle("on",p===name);
+  });
+  if(name==="styles"&&!styInited){ initCatTabs(); renderStyles(null); styInited=true; }
+}
+
+/* ── SETTINGS ── */
+function setTheme(name,dot){
+  document.body.dataset.theme=name;
+  document.querySelectorAll(".tdot").forEach(function(d){d.classList.remove("on");});
+  dot.classList.add("on");
+  toast("Theme changed!","🎨");
+}
+function onWake(chk){
+  if(chk.checked&&navigator.wakeLock){
+    navigator.wakeLock.request("screen").then(function(wl){S.wl=wl;toast("Screen ON rahega","📱");}).catch(function(){toast("Wake lock failed","⚠️");});
+  } else {
+    if(S.wl){S.wl.release();S.wl=null;} toast("Screen auto-off hoga","💤");
+  }
+}
+function editName(){
+  var n=prompt("Apna naam likho:");
+  if(n&&n.trim()&&D["pfnm"]) D["pfnm"].textContent=n.trim();
+}
+
+/* ── PREMIUM ── */
+function onBuyPremium(){
+  openMod("👑 Lifetime Premium — ₹299",
+    "<div class='ibox' style='text-align:center;padding:16px'>" +
+    "<div style='font-size:36px;margin-bottom:8px'>🎉</div>" +
+    "<div style='font-size:18px;font-weight:900;margin-bottom:4px'>₹299 — Lifetime Access</div>" +
+    "<div style='font-size:12px;color:var(--t2)'>Koi subscription nahi · Hamesha ke liye</div></div>" +
+    "<button class='bf' style='background:linear-gradient(135deg,var(--gold),#f97316);color:#000;font-size:15px' onclick=\'toast(\'Payment processing...\',\'✅\');closeMod()\'>💳 ₹299 mein Buy Karo</button>" +
+    "<button class='bf' style='background:var(--s2);color:var(--t2)' onclick='closeMod()'>Baad mein karta hoon</button>"
+  );
+}
+
+/* ── MODAL ── */
+function openMod(title,body){
+  D["mbd"].innerHTML="<div class='ml-ti'>"+title+"</div>"+body;
+  D["mlo"].classList.add("on");
+}
+function closeMod(){ D["mlo"].classList.remove("on"); }
+function mloClick(e){ if(e.target===D["mlo"]) closeMod(); }
+
+/* ── TOAST ── */
+function toast(msg,icon){
+  D["tic"].textContent=(icon||"")+" "; D["tmsg"].textContent=msg;
+  var el=D["toast"]; el.classList.remove("on"); void el.offsetWidth; el.classList.add("on");
+  clearTimeout(S.toastTmr);
+  S.toastTmr=setTimeout(function(){el.classList.remove("on");},2800);
+}
+
+/* ── SHARE ── */
+function onShare(){
+  if(navigator.share) navigator.share({title:"CaptioneX Pro",text:"Best caption app!",url:location.href});
+  else if(navigator.clipboard) navigator.clipboard.writeText(location.href).then(function(){ toast("Link copy ho gaya!","📋"); });
+}
+function clearAllData(){
+  openMod("⚠️ Sab Reset Karo?",
+    "<p style='color:var(--t2);font-size:12px;margin-bottom:12px'>Sab captions delete ho jayenge. Yeh undo nahi hoga.</p>" +
+    "<button class='bf' style='background:var(--red);color:#fff' onclick=\'S.caps=[];S.capCnt=0;D[\'stc\'].textContent=0;renderCaps();closeMod();toast(\'Reset ho gaya!\',\'🗑️\');\'>Haan, Reset Karo</button>" +
+    "<button class='bf' style='background:var(--s2);color:var(--t2)' onclick='closeMod()'>Cancel</button>"
+  );
+}
+
+/* ── ONBOARDING ── */
+function onbNext(){
+  var slides=document.querySelectorAll(".onb-slide");
+  var dots=document.querySelectorAll(".onb-dot");
+  if(S.onbStep<slides.length-1){
+    slides[S.onbStep].classList.remove("on");
+    slides[S.onbStep].classList.add("out");
+    setTimeout(function(){
+      if(slides[S.onbStep]) slides[S.onbStep].classList.remove("out");
+    },400);
+    S.onbStep++;
+    slides[S.onbStep].classList.add("on");
+    dots.forEach(function(d,i){d.classList.toggle("on",i===S.onbStep);});
+    if(S.onbStep===slides.length-1){
+      document.querySelector(".onb-next").textContent="Shuru Karo! 🚀";
+    }
+  } else {
+    onbSkip();
+  }
+}
+function onbSkip(){
+  D["onb"].classList.remove("on");
+  localStorage.setItem("captionex_onb","done");
+}
+
+/* ── EXPOSE GLOBALS ── */
+var G={goPage:goPage,vzClick:vzClick,onFile:onFile,onPlay:onPlay,onRestart:onRestart,
+  onSkip:onSkip,onMute:onMute,cycleSpeed:cycleSpeed,onAdd:onAdd,clearCaps:clearCaps,
+  renderCaps:renderCaps,onMic:onMic,onAIDet:onAIDet,onAIPage:onAIPage,onLang:onLang,
+  onSize:onSize,onPos:onPos,onOp:onOp,setSty:setSty,setTheme:setTheme,onWake:onWake,
+  editName:editName,doExport:doExport,startRender:startRender,cancelRender:cancelRender,
+  closeMod:closeMod,mloClick:mloClick,onSrch:onSrch,onShare:onShare,toast:toast,
+  onBuyPremium:onBuyPremium,clearAllData:clearAllData,onbNext:onbNext,onbSkip:onbSkip,S:S,D:D};
+Object.keys(G).forEach(function(k){window[k]=G[k];});
+
+/* ── BOOT ── */
+document.addEventListener("DOMContentLoaded",function(){
+  initColors(); initQuick(); initVidEv(); initSpeech();
+  requestAnimationFrame(vidLoop);
+  setTimeout(function(){
+    $("splash").classList.add("out");
+    $("app").classList.add("on");
+    try{
+      if(!localStorage.getItem("captionex_onb")){
+        setTimeout(function(){D["onb"].classList.add("on");},300);
+      }
+    }catch(e){}
+  },2800);
+});
+
+})();
+</script>
+<script>
+if("serviceWorker"in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
+</script>
+</body>
+</html>
