@@ -1,0 +1,26 @@
+name: Build APK for PlayStore
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - run: npm install
+    - run: npx cap add android || true
+    - run: npx cap sync android
+    - run: chmod +x android/gradlew
+    - run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/release.jks
+    - working-directory: android
+      run: ./gradlew assembleRelease -Pandroid.injected.signing.store.file=${{ github.workspace }}/android/app/release.jks -Pandroid.injected.signing.store.password=${{ secrets.STORE_PASS }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASS }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: CaptioneX-APK
+        path: android/app/build/outputs/apk/release/app-release.apk
