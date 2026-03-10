@@ -1,7 +1,7 @@
 {
   "appId": "com.captionex.pro",
   "appName": "CaptioneX Pro",
-  "webDir": "www",
+  "webDir": ".",
   "android": {
     "allowMixedContent": false,
     "backgroundColor": "#09090f"
