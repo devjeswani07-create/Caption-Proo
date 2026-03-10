@@ -15,6 +15,14 @@ jobs:
         node-version: '20'
     - run: npm install
     - run: npx cap add android || true
+    - name: Create www folder
+      run: |
+        mkdir -p www
+        if [ -f "index.html" ]; then
+          cp index.html www/
+        else
+          echo "<html><body><h1>CaptioneX</h1></body></html>" > www/index.html
+        fi
     - run: npx cap sync android
     - run: chmod +x android/gradlew
     - run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/release.jks
